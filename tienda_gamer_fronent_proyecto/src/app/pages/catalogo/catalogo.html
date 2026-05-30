@@ -1,0 +1,58 @@
+<app-navbar></app-navbar>
+
+<div class="catalogo-container">
+  <div class="layout">
+    
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h3>Líneas de Hardware</h3>
+      </div>
+      <div class="sidebar-actions" *ngIf="esAdmin">
+        <button (click)="abrirModalCrear()" class="btn-create">➕ Producto</button>
+        <button (click)="mostrarModalCat = true" class="btn-create btn-cat">📁 Categoría</button>
+      </div>
+      <ul>
+        <li>
+          <button (click)="seleccionarCategoria(null)" [class.active]="categoriaSeleccionadaId === null">Ver Todo</button>
+        </li>
+        <li *ngFor="let cat of categorias">
+          <button (click)="seleccionarCategoria(cat.id)" [class.active]="categoriaSeleccionadaId === cat.id">📁 {{ cat.nombre }}</button>
+        </li>
+      </ul>
+    </aside>
+
+    <main class="content">
+      <div class="grid">
+        <div *ngFor="let prod of productos" class="card" [routerLink]="['/producto', prod.id]">
+          <div class="card-img">
+            <img [src]="prod.imagenUrl || 'https://via.placeholder.com/200'" alt="Hardware">
+          </div>
+          <div class="card-body">
+            <div>
+              <h4 class="prod-title">{{ prod.nombre }}</h4>
+              <p class="prod-desc">{{ prod.descripcion }}</p>
+            </div>
+            <div class="card-footer">
+              <div class="meta">
+                <span class="price">${{ prod.precio }}</span>
+                <span class="stock">Stock: {{ prod.stock }}</span>
+              </div>
+              <div class="actions">
+                <button *ngIf="!esAdmin" class="btn-cart-add" (click)="agregarAlCarrito(prod, $event)">Comprar 🛒</button>
+                <ng-container *ngIf="esAdmin">
+                  <button (click)="abrirModalEditar(prod, $event)" class="btn-edit">✏️ Editar</button>
+                  <button (click)="eliminarProducto(prod.id, $event)" class="btn-delete">🗑️ Borrar</button>
+                </ng-container>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+  </div>
+</div>
+
+<app-producto-form *ngIf="mostrarModal" [producto]="productoEditar" [categorias]="categorias" (alCerrar)="cerrarModal($event)"></app-producto-form>
+<app-categoria-form *ngIf="mostrarModalCat" (alCerrar)="cerrarModalCat($event)"></app-categoria-form>
+<app-footer></app-footer>

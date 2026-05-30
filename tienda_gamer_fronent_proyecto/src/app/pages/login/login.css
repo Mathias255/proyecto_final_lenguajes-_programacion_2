@@ -1,0 +1,145 @@
+.login-wrapper {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: radial-gradient(circle at center, #1a1a2e 0%, #0a0a0c 100%);
+}
+
+.login-box {
+  background: var(--bg-card);
+  padding: 3rem;
+  border-radius: 16px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: var(--shadow);
+  border: 1px solid #333;
+  text-align: center;
+}
+
+h2 {
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  letter-spacing: 2px;
+}
+
+.subtitle {
+  color: var(--text-dim);
+  margin-bottom: 2rem;
+  font-size: 0.9rem;
+}
+
+.input-group {
+  text-align: left;
+  margin-bottom: 1.5rem;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: var(--text-dim);
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #333;
+  background: #0f0f12;
+}
+
+.btn-submit {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(45deg, var(--secondary), var(--primary));
+  color: white;
+  font-weight: bold;
+  border-radius: 8px;
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+
+.btn-submit:hover {
+  filter: brightness(1.2);
+  box-shadow: 0 0 20px rgba(112, 0, 255, 0.4);
+}
+
+.alert {
+  background: rgba(255, 0, 85, 0.1);
+  color: var(--accent);
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 1.5rem;
+  border: 1px solid var(--accent);
+  font-size: 0.9rem;
+}
+
+.hint {
+  margin-top: 2rem;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.back-btn {
+  display: inline-block;
+  margin-top: 1.5rem;
+  color: var(--primary);
+  font-size: 0.9rem;
+  border-bottom: 1px solid transparent;
+}
+
+.back-btn:hover {
+  border-bottom-color: var(--primary);
+}
+
+.social-login {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid #333;
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.btn-social {
+  padding: 10px 20px;
+  border-radius: 6px;
+  background: #222;
+  color: white;
+  font-size: 0.8rem;
+  border: 1px solid #444;
+}
+
+.btn-social:hover {
+  background: #333;
+}
+
+.register-section {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background: #0f0f12;
+  border-radius: 12px;
+  border: 1px dashed #444;
+}
+
+.register-section p {
+  font-size: 0.85rem;
+  color: var(--text-dim);
+  margin-bottom: 0.8rem;
+}
+
+.btn-register {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  color: var(--primary);
+  border: 1px solid var(--primary);
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.btn-register:hover {
+  background: var(--primary);
+  color: var(--bg-dark);
+}

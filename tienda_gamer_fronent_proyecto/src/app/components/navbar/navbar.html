@@ -1,0 +1,22 @@
+<header class="navbar">
+  <h1 class="logo" routerLink="/home">🎮 GAMER SHOP</h1>
+  <nav class="nav-links">
+    <a routerLink="/home" routerLinkActive="active">Inicio</a>
+    <a routerLink="/catalogo" routerLinkActive="active">Catálogo</a>
+    <a routerLink="/carrito" class="cart-btn">
+      Carrito 🛒 
+      <span class="badge" *ngIf="totalCarrito() > 0">{{ totalCarrito() }}</span>
+    </a>
+    
+    <div class="auth-section">
+      <span *ngIf="usuarioLogueado" class="user-badge">
+        👤 {{ usuarioLogueado.nombre }} ({{ usuarioLogueado.rol }})
+        <button (click)="logout()" class="btn-logout">Salir</button>
+      </span>
+      <div *ngIf="!usuarioLogueado" class="guest-actions">
+        <a routerLink="/login" class="btn-login-link">Iniciar Sesión</a>
+        <a routerLink="/registro" class="btn-register-link">Registrarse</a>
+      </div>
+    </div>
+  </nav>
+</header>

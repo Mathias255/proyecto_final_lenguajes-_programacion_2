@@ -1,0 +1,106 @@
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 5%;
+  background: rgba(22, 22, 26, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid #333;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--primary);
+  text-shadow: 0 0 10px rgba(0, 242, 255, 0.5);
+  cursor: pointer;
+}
+
+.nav-links {
+  display: flex;
+  gap: 2rem;
+  align-items: center;
+}
+
+.nav-links a {
+  font-weight: 500;
+  color: var(--text-dim);
+  transition: color 0.3s;
+}
+
+.nav-links a:hover, .nav-links a.active {
+  color: var(--primary);
+}
+
+.cart-btn {
+  background: #222;
+  padding: 8px 16px;
+  border-radius: 20px;
+  border: 1px solid #444;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge {
+  background: var(--accent);
+  color: white;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border-radius: 10px;
+  font-weight: bold;
+}
+
+.auth-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border-left: 1px solid #444;
+  padding-left: 1rem;
+}
+
+.user-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  background: #1a1a1f;
+  padding: 5px 15px;
+  border-radius: 8px;
+  font-size: 0.9rem;
+}
+
+.btn-logout {
+  background: var(--accent);
+  color: white;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+}
+
+.btn-login-link {
+  background: var(--primary);
+  color: var(--bg-dark) !important;
+  font-weight: bold;
+  padding: 8px 20px;
+  border-radius: 6px;
+}
+
+.guest-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.btn-register-link {
+  border: 1px solid var(--primary);
+  color: var(--primary) !important;
+  font-weight: bold;
+  padding: 8px 20px;
+  border-radius: 6px;
+}
+
+.btn-register-link:hover {
+  background: rgba(0, 242, 255, 0.1);
+}

@@ -1,0 +1,45 @@
+<div class="backdrop">
+  <div class="modal">
+    <h3>{{ formProducto.id ? 'Editar Componente Gamer' : 'Nuevo Componente' }}</h3>
+    
+    <form (ngSubmit)="guardar()">
+      <div class="group">
+        <label>Nombre</label>
+        <input [(ngModel)]="formProducto.nombre" name="nombre" type="text" required>
+      </div>
+
+      <div class="group">
+        <label>Descripción</label>
+        <textarea [(ngModel)]="formProducto.descripcion" name="descripcion" rows="2" required></textarea>
+      </div>
+
+      <div class="row">
+        <div class="group flex">
+          <label>Precio ($)</label>
+          <input [(ngModel)]="formProducto.precio" name="precio" type="number" step="0.01" required>
+        </div>
+        <div class="group flex">
+          <label>Stock</label>
+          <input [(ngModel)]="formProducto.stock" name="stock" type="number" required>
+        </div>
+      </div>
+
+      <div class="group">
+        <label>Categoría</label>
+        <select [(ngModel)]="categoriaIdSeleccionada" name="categoria">
+          <option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nombre }}</option>
+        </select>
+      </div>
+
+      <div class="group">
+        <label>URL Imagen</label>
+        <input [(ngModel)]="formProducto.imagenUrl" name="imagenUrl" type="url">
+      </div>
+
+      <div class="btns">
+        <button type="button" (click)="cancelar()" class="btn-c">Cancelar</button>
+        <button type="submit" class="btn-g">Guardar</button>
+      </div>
+    </form>
+  </div>
+</div>

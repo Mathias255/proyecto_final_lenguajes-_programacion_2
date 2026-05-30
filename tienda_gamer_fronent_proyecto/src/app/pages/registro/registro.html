@@ -1,0 +1,37 @@
+<div class="login-wrapper">
+  <div class="login-box">
+    <h2>CREAR CUENTA</h2>
+    <p class="subtitle">Únete a la comunidad gamer</p>
+    
+    <div *ngIf="errorMessage" class="alert">{{ errorMessage }}</div>
+
+    <form (ngSubmit)="onRegister()">
+      <div class="input-group">
+        <label>Nombre Completo</label>
+        <input type="text" [(ngModel)]="nombre" name="nombre" placeholder="Tu nombre" required>
+      </div>
+
+      <div class="input-group">
+        <label>Correo Electrónico</label>
+        <input type="email" [(ngModel)]="email" name="email" placeholder="ejemplo@tienda.com" required>
+      </div>
+      
+      <div class="input-group">
+        <label>Contraseña</label>
+        <input type="password" [(ngModel)]="password" name="password" placeholder="••••••••" required>
+      </div>
+
+      <div class="input-group">
+        <label>Rol</label>
+        <select [(ngModel)]="rol" name="rol">
+          <option value="CLIENTE">Cliente</option>
+          <option value="ADMIN">Administrador</option>
+        </select>
+      </div>
+
+      <button type="submit" class="btn-submit">Registrarme 🚀</button>
+    </form>
+
+    <a routerLink="/login" class="back-btn">¿Ya tienes cuenta? Inicia sesión</a>
+  </div>
+</div>

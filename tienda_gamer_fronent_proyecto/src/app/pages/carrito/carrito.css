@@ -1,0 +1,146 @@
+.carrito-container {
+  padding: 50px 5%;
+  min-height: 70vh;
+}
+
+h2 {
+  color: var(--primary);
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.cart-layout {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 40px;
+}
+
+.items-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cart-item {
+  background: var(--bg-card);
+  padding: 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  border: 1px solid #333;
+}
+
+.cart-item img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.item-info {
+  flex: 1;
+}
+
+.item-info h4 {
+  color: white;
+  margin-bottom: 5px;
+}
+
+.category {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+.price-unit {
+  color: var(--primary);
+  font-weight: bold;
+}
+
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  background: #222;
+  padding: 5px 15px;
+  border-radius: 30px;
+}
+
+.quantity-controls button {
+  background: transparent;
+  color: white;
+  font-size: 1.2rem;
+  width: 30px;
+}
+
+.subtotal {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--primary);
+  min-width: 100px;
+  text-align: right;
+}
+
+.btn-remove {
+  background: transparent;
+  font-size: 1.2rem;
+  padding: 5px;
+}
+
+.cart-summary {
+  background: var(--bg-card);
+  padding: 30px;
+  border-radius: 16px;
+  border: 1px solid #444;
+  height: fit-content;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 15px 0;
+  color: var(--text-dim);
+}
+
+.total {
+  color: var(--primary);
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-top: 20px;
+}
+
+.free {
+  color: var(--success);
+  font-weight: bold;
+}
+
+.btn-checkout {
+  width: 100%;
+  padding: 15px;
+  background: var(--primary);
+  color: var(--bg-dark);
+  font-weight: bold;
+  border-radius: 8px;
+  margin-top: 20px;
+  font-size: 1.1rem;
+}
+
+.btn-clear {
+  width: 100%;
+  margin-top: 10px;
+  background: transparent;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 100px 0;
+}
+
+.empty-state p {
+  font-size: 1.2rem;
+  color: var(--text-dim);
+  margin-bottom: 30px;
+}
