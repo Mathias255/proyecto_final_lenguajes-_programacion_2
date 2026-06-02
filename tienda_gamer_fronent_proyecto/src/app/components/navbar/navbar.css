@@ -11,6 +11,14 @@
   z-index: 1000;
 }
 
+@media (max-width: 900px) {
+  .navbar {
+    flex-direction: column;
+    gap: 1rem;
+    padding: 1rem;
+  }
+}
+
 .logo {
   font-size: 1.5rem;
   font-weight: 900;
@@ -23,6 +31,15 @@
   display: flex;
   gap: 2rem;
   align-items: center;
+}
+
+@media (max-width: 600px) {
+  .nav-links {
+    gap: 1rem;
+    font-size: 0.9rem;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
 }
 
 .nav-links a {
@@ -62,6 +79,13 @@
   padding-left: 1rem;
 }
 
+@media (max-width: 900px) {
+  .auth-section {
+    border-left: none;
+    padding-left: 0;
+  }
+}
+
 .user-badge {
   display: flex;
   align-items: center;
@@ -78,6 +102,11 @@
   padding: 4px 10px;
   border-radius: 4px;
   font-size: 0.8rem;
+  transition: 0.3s;
+}
+
+.btn-logout:hover {
+  filter: brightness(1.2);
 }
 
 .btn-login-link {
@@ -86,6 +115,12 @@
   font-weight: bold;
   padding: 8px 20px;
   border-radius: 6px;
+  transition: 0.3s;
+}
+
+.btn-login-link:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 0 15px var(--primary);
 }
 
 .guest-actions {
@@ -99,6 +134,7 @@
   font-weight: bold;
   padding: 8px 20px;
   border-radius: 6px;
+  transition: 0.3s;
 }
 
 .btn-register-link:hover {

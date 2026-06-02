@@ -9,11 +9,12 @@ import { ApiService } from '../../services/api';
 import { AuthService } from '../../services/auth';
 import { CartService } from '../../services/cart';
 import { Producto, Categoria } from '../../models/interfaces';
+import { AnimeDirective } from '../../directives/anime.directive';
 
 @Component({
   selector: 'app-catalogo',
   standalone: true,
-  imports: [CommonModule, RouterModule, NavbarComponent, FooterComponent, ProductoFormComponent, CategoriaFormComponent],
+  imports: [CommonModule, RouterModule, NavbarComponent, FooterComponent, ProductoFormComponent, CategoriaFormComponent, AnimeDirective],
   templateUrl: './catalogo.html',
   styleUrls: ['./catalogo.css']
 })

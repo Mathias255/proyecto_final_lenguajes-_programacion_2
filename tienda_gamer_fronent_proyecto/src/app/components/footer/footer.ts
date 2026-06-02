@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { AnimeDirective } from '../../directives/anime.directive';
 
 @Component({
   selector: 'app-footer',
   standalone: true,
-  imports: [],
+  imports: [AnimeDirective],
   templateUrl: './footer.html',
   styleUrls: ['./footer.css']
 })

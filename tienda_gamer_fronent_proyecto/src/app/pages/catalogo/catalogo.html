@@ -23,7 +23,7 @@
 
     <main class="content">
       <div class="grid">
-        <div *ngFor="let prod of productos" class="card" [routerLink]="['/producto', prod.id]">
+        <div *ngFor="let prod of productos" class="card" [routerLink]="['/producto', prod.id]" [appAnime]="{ scale: [0.9, 1], opacity: [0, 1], duration: 500 }">
           <div class="card-img">
             <img [src]="prod.imagenUrl || 'https://via.placeholder.com/200'" alt="Hardware">
           </div>
@@ -53,6 +53,6 @@
   </div>
 </div>
 
-<app-producto-form *ngIf="mostrarModal" [producto]="productoEditar" [categorias]="categorias" (alCerrar)="cerrarModal($event)"></app-producto-form>
-<app-categoria-form *ngIf="mostrarModalCat" (alCerrar)="cerrarModalCat($event)"></app-categoria-form>
+<app-producto-form *ngIf="mostrarModal" [appAnime]="{ opacity: [0, 1], duration: 300 }" [producto]="productoEditar" [categorias]="categorias" (alCerrar)="cerrarModal($event)"></app-producto-form>
+<app-categoria-form *ngIf="mostrarModalCat" [appAnime]="{ opacity: [0, 1], duration: 300 }" (alCerrar)="cerrarModalCat($event)"></app-categoria-form>
 <app-footer></app-footer>

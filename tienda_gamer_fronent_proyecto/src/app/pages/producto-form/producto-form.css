@@ -4,28 +4,44 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0,0,0,0.8);
-  backdrop-filter: blur(5px);
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(8px);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 2000;
+  padding: 20px;
 }
 
 .modal {
   background: var(--bg-card);
   padding: 2.5rem;
   border-radius: 16px;
-  width: 90%;
+  width: 100%;
   max-width: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
   border: 1px solid #444;
-  box-shadow: var(--shadow);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+}
+
+@media (max-width: 600px) {
+  .modal {
+    padding: 1.5rem;
+  }
+  
+  .row {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
 }
 
 h3 {
   color: var(--primary);
   margin-bottom: 2rem;
   font-size: 1.5rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .group {
@@ -41,8 +57,19 @@ h3 {
 
 .group input, .group textarea, .group select {
   width: 100%;
-  padding: 12px;
+  padding: 14px;
   background: #0f0f12;
+  border: 1px solid #333;
+  color: white;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: 0.3s;
+}
+
+.group input:focus, .group textarea:focus, .group select:focus {
+  border-color: var(--primary);
+  outline: none;
+  box-shadow: 0 0 10px rgba(0, 255, 170, 0.1);
 }
 
 .row {
@@ -60,19 +87,29 @@ h3 {
 
 .btn-c {
   padding: 12px 25px;
-  background: #333;
-  color: white;
+  background: transparent;
+  color: var(--text-dim);
   border-radius: 8px;
+  border: 1px solid #444;
+  transition: 0.3s;
+}
+
+.btn-c:hover {
+  background: #222;
+  color: white;
 }
 
 .btn-g {
   padding: 12px 35px;
-  background: var(--success);
+  background: var(--primary);
   color: var(--bg-dark);
   font-weight: bold;
   border-radius: 8px;
+  border: none;
+  transition: 0.3s;
 }
 
 .btn-g:hover {
   filter: brightness(1.1);
+  transform: scale(1.02);
 }

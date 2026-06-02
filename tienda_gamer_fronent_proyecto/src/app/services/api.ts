@@ -56,6 +56,7 @@ export class ApiService {
     return this.http.get<Usuario>(`${this.baseUrl}/usuarios/login?email=${email}&password=${pass}`);
   }
 
+  
   // --- REGISTRO ---
   registrarUsuario(usuario: Usuario): Observable<Usuario> {
     return this.http.post<Usuario>(`${this.baseUrl}/usuarios`, usuario);

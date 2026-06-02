@@ -4,11 +4,12 @@ import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { CartService } from '../../services/cart';
 import { Usuario } from '../../models/interfaces';
+import { AnimeDirective } from '../../directives/anime.directive';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [CommonModule, RouterModule],
+  imports: [CommonModule, RouterModule, AnimeDirective],
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.css']
 })
