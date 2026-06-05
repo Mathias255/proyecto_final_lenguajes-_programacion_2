@@ -8,24 +8,24 @@
     <form (ngSubmit)="onRegister()">
       <div class="input-group">
         <label>Nombre Completo</label>
-        <input type="text" [(ngModel)]="nombre" name="nombre" placeholder="Tu nombre" required>
+        <input type="text" [(ngModel)]="usuario.nombre" name="nombre" placeholder="Tu nombre" required>
       </div>
 
       <div class="input-group">
         <label>Correo Electrónico</label>
-        <input type="email" [(ngModel)]="email" name="email" placeholder="ejemplo@tienda.com" required>
+        <input type="email" [(ngModel)]="usuario.email" name="email" placeholder="ejemplo@tienda.com" required>
       </div>
       
       <div class="input-group">
         <label>Contraseña</label>
-        <input type="password" [(ngModel)]="password" name="password" placeholder="••••••••" required>
+        <input type="password" [(ngModel)]="usuario.password" name="password" placeholder="••••••••" required>
       </div>
 
       <div class="input-group">
         <label>Rol</label>
-        <select [(ngModel)]="rol" name="rol">
-          <option value="CLIENTE">Cliente</option>
-          <option value="ADMIN">Administrador</option>
+        <select [(ngModel)]="usuario.rol" name="rol">
+          <option value="Cliente">Cliente</option>
+          <option value="Administrador">Administrador</option>
         </select>
       </div>
 

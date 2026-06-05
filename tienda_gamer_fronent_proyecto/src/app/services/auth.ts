@@ -34,7 +34,8 @@ export class AuthService {
   }
 
   esAdmin(): boolean {
-    return this.currentUserValue?.rol === 'ADMIN';
+    const rol = this.currentUserValue?.rol;
+    return rol === 'ADMIN' || rol === 'Administrador';
   }
 
   isLoggedIn(): boolean {

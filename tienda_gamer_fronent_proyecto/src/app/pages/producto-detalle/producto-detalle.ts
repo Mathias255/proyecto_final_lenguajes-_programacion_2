@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
-import { ApiService } from '../../services/api';
+import { ProductoService } from '../../services/producto.service';
 import { CartService } from '../../services/cart';
 import { Producto } from '../../models/interfaces';
 import { NavbarComponent } from '../../components/navbar/navbar';
@@ -15,19 +15,18 @@ import { FooterComponent } from '../../components/footer/footer';
   styleUrls: ['./producto-detalle.css']
 })
 export class ProductoDetalleComponent implements OnInit {
-  producto: Producto | null = null;
+  private route = inject(ActivatedRoute);
+  private productoService = inject(ProductoService);
+  private cartService = inject(CartService);
 
-  constructor(
-    private route: ActivatedRoute, 
-    private apiService: ApiService,
-    private cartService: CartService
-  ) {}
+  producto: Producto | null = null;
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     if (id) {
-      this.apiService.getProductos().subscribe(productos => {
-        this.producto = productos.find(p => p.id === id) || null;
+      this.productoService.getProducto(id).subscribe({
+        next: (p) => this.producto = p,
+        error: (err) => console.error('Error al cargar producto', err)
       });
     }
   }

@@ -1,7 +1,8 @@
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Producto, Categoria } from '../../models/interfaces';
+import { ProductoService } from '../../services/producto.service';
 
 @Component({
   selector: 'app-producto-form',
@@ -11,6 +12,8 @@ import { Producto, Categoria } from '../../models/interfaces';
   styleUrls: ['./producto-form.css']
 })
 export class ProductoFormComponent implements OnInit {
+  private productoService = inject(ProductoService);
+
   @Input() producto: Producto | null = null;
   @Input() categorias: Categoria[] = [];
   @Output() alCerrar = new EventEmitter<Producto | null>();
@@ -40,7 +43,18 @@ export class ProductoFormComponent implements OnInit {
     if (cat) {
       this.formProducto.categoria = cat;
     }
-    this.alCerrar.emit(this.formProducto);
+
+    if (this.formProducto.id) {
+      this.productoService.actualizarProducto(this.formProducto.id, this.formProducto).subscribe({
+        next: (res) => this.alCerrar.emit(res),
+        error: (err) => console.error('Error al actualizar producto', err)
+      });
+    } else {
+      this.productoService.crearProducto(this.formProducto).subscribe({
+        next: (res) => this.alCerrar.emit(res),
+        error: (err) => console.error('Error al crear producto', err)
+      });
+    }
   }
 
   cancelar() {

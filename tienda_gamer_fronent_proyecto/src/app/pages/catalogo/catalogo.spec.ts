@@ -11,7 +11,7 @@ describe('CatalogoComponent', () => {
     await TestBed.configureTestingModule({
       imports: [CatalogoComponent],
       providers: [
-        provideHttpClient(), // Evita fallos si el componente usa ApiService
+        provideHttpClient(), // Evita fallos por el uso de servicios HTTP
         provideRouter([])    // Evita fallos por el uso de RouterModule/Link
       ]
     }).compileComponents();

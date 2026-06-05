@@ -5,7 +5,8 @@ import { NavbarComponent } from '../../components/navbar/navbar';
 import { FooterComponent } from '../../components/footer/footer';
 import { ProductoFormComponent } from '../producto-form/producto-form';
 import { CategoriaFormComponent } from '../../components/categoria-form/categoria-form';
-import { ApiService } from '../../services/api';
+import { ProductoService } from '../../services/producto.service';
+import { CategoriaService } from '../../services/categoria.service';
 import { AuthService } from '../../services/auth';
 import { CartService } from '../../services/cart';
 import { Producto, Categoria } from '../../models/interfaces';
@@ -19,7 +20,8 @@ import { AnimeDirective } from '../../directives/anime.directive';
   styleUrls: ['./catalogo.css']
 })
 export class CatalogoComponent implements OnInit {
-  private apiService = inject(ApiService);
+  private productoService = inject(ProductoService);
+  private categoriaService = inject(CategoriaService);
   private authService = inject(AuthService);
   private cartService = inject(CartService);
 
@@ -39,14 +41,14 @@ export class CatalogoComponent implements OnInit {
   }
 
   cargarCategorias() {
-    this.apiService.getCategorias().subscribe(cats => this.categorias = cats);
+    this.categoriaService.getCategorias().subscribe(cats => this.categorias = cats);
   }
 
   cargarProductos() {
     if (this.categoriaSeleccionadaId) {
-      this.apiService.getProductosPorCategoria(this.categoriaSeleccionadaId).subscribe(prods => this.productos = prods);
+      this.productoService.getProductosPorCategoria(this.categoriaSeleccionadaId).subscribe(prods => this.productos = prods);
     } else {
-      this.apiService.getProductos().subscribe(prods => this.productos = prods);
+      this.productoService.getProductos().subscribe(prods => this.productos = prods);
     }
   }
 
@@ -74,25 +76,25 @@ export class CatalogoComponent implements OnInit {
   cerrarModal(producto: Producto | null) {
     this.mostrarModal = false;
     if (producto) {
-      if (producto.id) {
-        this.apiService.actualizarProducto(producto.id, producto).subscribe(() => this.cargarProductos());
-      } else {
-        this.apiService.crearProducto(producto).subscribe(() => this.cargarProductos());
-      }
+      // Si el componente ya guardó el producto, solo recargamos.
+      // Pero según la lógica actual del componente padre, él es quien llama al service.
+      // El usuario pidió: "Conecta el formulario... para que, al dar clic en el botón 'Guardar', realice un envío POST exitoso"
+      // Así que moveré la lógica de guardado a los componentes de formulario.
+      this.cargarProductos();
     }
   }
 
   cerrarModalCat(cat: Categoria | null) {
     this.mostrarModalCat = false;
     if (cat) {
-      this.apiService.crearCategoria(cat).subscribe(() => this.cargarCategorias());
+      this.cargarCategorias();
     }
   }
 
   eliminarProducto(id: number | undefined, event: Event) {
     event.stopPropagation();
     if (id && confirm('¿Estás seguro de eliminar este producto?')) {
-      this.apiService.deleteProducto(id).subscribe(() => this.cargarProductos());
+      this.productoService.eliminarProducto(id).subscribe(() => this.cargarProductos());
     }
   }
 }

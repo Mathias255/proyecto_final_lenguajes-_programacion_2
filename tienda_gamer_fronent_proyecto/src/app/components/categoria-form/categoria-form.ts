@@ -1,7 +1,8 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Categoria } from '../../models/interfaces';
+import { CategoriaService } from '../../services/categoria.service';
 
 @Component({
   selector: 'app-categoria-form',
@@ -31,13 +32,19 @@ import { Categoria } from '../../models/interfaces';
   styleUrls: ['../../pages/producto-form/producto-form.css'] // Reutilizamos estilos
 })
 export class CategoriaFormComponent {
+  private categoriaService = inject(CategoriaService);
+  
   nombre = '';
   descripcion = '';
   @Output() alCerrar = new EventEmitter<Categoria | null>();
 
   guardar() {
     if (this.nombre.trim()) {
-      this.alCerrar.emit({ id: 0, nombre: this.nombre, descripcion: this.descripcion });
+      const nuevaCat: Categoria = { id: 0, nombre: this.nombre, descripcion: this.descripcion };
+      this.categoriaService.crearCategoria(nuevaCat).subscribe({
+        next: (res) => this.alCerrar.emit(res),
+        error: (err) => console.error('Error al crear categoría', err)
+      });
     }
   }
 }

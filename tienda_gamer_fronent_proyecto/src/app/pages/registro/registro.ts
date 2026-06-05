@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
-import { ApiService } from '../../services/api';
+import { UsuarioService } from '../../services/usuario.service';
 import { Usuario } from '../../models/interfaces';
 
 @Component({
@@ -13,34 +13,21 @@ import { Usuario } from '../../models/interfaces';
   styleUrls: ['./registro.css']
 })
 export class RegistroComponent {
-  nombre = '';
-  email = '';
-  password = '';
-  rol: 'CLIENTE' | 'ADMIN' = 'CLIENTE';
+  private usuarioService = inject(UsuarioService);
+  private router = inject(Router);
+
+  usuario: Usuario = {
+    nombre: '',
+    email: '',
+    password: '',
+    rol: 'Cliente'
+  };
+
   errorMessage = '';
 
-  constructor(private apiService: ApiService, private router: Router) {}
-
   onRegister() {
-    // Bypass para simular registro exitoso de admin en local si falla el servidor
-    if (this.email === 'admin@tienda.com') {
-      alert('¡Usuario Administrador simulado con éxito!');
-      this.router.navigate(['/login']);
-      return;
-    }
-
-    const nuevoUsuario: Usuario = {
-      nombre: this.nombre,
-      email: this.email,
-      password: this.password,
-      rol: this.rol
-    };
-
-    console.log('Intentando registrar:', nuevoUsuario);
-
-    this.apiService.registrarUsuario(nuevoUsuario).subscribe({
+    this.usuarioService.registrar(this.usuario).subscribe({
       next: (res) => {
-        console.log('Registro exitoso:', res);
         alert('¡Usuario registrado con éxito! Ahora puedes iniciar sesión.');
         this.router.navigate(['/login']);
       },

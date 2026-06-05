@@ -7,52 +7,63 @@
       <div class="sidebar-header">
         <h3>Líneas de Hardware</h3>
       </div>
-      <div class="sidebar-actions" *ngIf="esAdmin">
-        <button (click)="abrirModalCrear()" class="btn-create">➕ Producto</button>
-        <button (click)="mostrarModalCat = true" class="btn-create btn-cat">📁 Categoría</button>
-      </div>
+      @if (esAdmin) {
+        <div class="sidebar-actions">
+          <button (click)="abrirModalCrear()" class="btn-create">➕ Producto</button>
+          <button (click)="mostrarModalCat = true" class="btn-create btn-cat">📁 Categoría</button>
+        </div>
+      }
       <ul>
         <li>
           <button (click)="seleccionarCategoria(null)" [class.active]="categoriaSeleccionadaId === null">Ver Todo</button>
         </li>
-        <li *ngFor="let cat of categorias">
-          <button (click)="seleccionarCategoria(cat.id)" [class.active]="categoriaSeleccionadaId === cat.id">📁 {{ cat.nombre }}</button>
-        </li>
+        @for (cat of categorias; track cat.id) {
+          <li>
+            <button (click)="seleccionarCategoria(cat.id)" [class.active]="categoriaSeleccionadaId === cat.id">📁 {{ cat.nombre }}</button>
+          </li>
+        }
       </ul>
     </aside>
 
     <main class="content">
       <div class="grid">
-        <div *ngFor="let prod of productos" class="card" [routerLink]="['/producto', prod.id]" [appAnime]="{ scale: [0.9, 1], opacity: [0, 1], duration: 500 }">
-          <div class="card-img">
-            <img [src]="prod.imagenUrl || 'https://via.placeholder.com/200'" alt="Hardware">
-          </div>
-          <div class="card-body">
-            <div>
-              <h4 class="prod-title">{{ prod.nombre }}</h4>
-              <p class="prod-desc">{{ prod.descripcion }}</p>
+        @for (prod of productos; track prod.id) {
+          <div class="card" [routerLink]="['/producto', prod.id]" [appAnime]="{ scale: [0.9, 1], opacity: [0, 1], duration: 500 }">
+            <div class="card-img">
+              <img [src]="prod.imagenUrl || 'https://via.placeholder.com/200'" alt="Hardware">
             </div>
-            <div class="card-footer">
-              <div class="meta">
-                <span class="price">${{ prod.precio }}</span>
-                <span class="stock">Stock: {{ prod.stock }}</span>
+            <div class="card-body">
+              <div>
+                <h4 class="prod-title">{{ prod.nombre }}</h4>
+                <p class="prod-desc">{{ prod.descripcion }}</p>
               </div>
-              <div class="actions">
-                <button *ngIf="!esAdmin" class="btn-cart-add" (click)="agregarAlCarrito(prod, $event)">Comprar 🛒</button>
-                <ng-container *ngIf="esAdmin">
-                  <button (click)="abrirModalEditar(prod, $event)" class="btn-edit">✏️ Editar</button>
-                  <button (click)="eliminarProducto(prod.id, $event)" class="btn-delete">🗑️ Borrar</button>
-                </ng-container>
+              <div class="card-footer">
+                <div class="meta">
+                  <span class="price">${{ prod.precio }}</span>
+                  <span class="stock">Stock: {{ prod.stock }}</span>
+                </div>
+                <div class="actions">
+                  @if (!esAdmin) {
+                    <button class="btn-cart-add" (click)="agregarAlCarrito(prod, $event)">Comprar 🛒</button>
+                  } @else {
+                    <button (click)="abrirModalEditar(prod, $event)" class="btn-edit">✏️ Editar</button>
+                    <button (click)="eliminarProducto(prod.id, $event)" class="btn-delete">🗑️ Borrar</button>
+                  }
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        }
       </div>
     </main>
 
   </div>
 </div>
 
-<app-producto-form *ngIf="mostrarModal" [appAnime]="{ opacity: [0, 1], duration: 300 }" [producto]="productoEditar" [categorias]="categorias" (alCerrar)="cerrarModal($event)"></app-producto-form>
-<app-categoria-form *ngIf="mostrarModalCat" [appAnime]="{ opacity: [0, 1], duration: 300 }" (alCerrar)="cerrarModalCat($event)"></app-categoria-form>
+@if (mostrarModal) {
+  <app-producto-form [appAnime]="{ opacity: [0, 1], duration: 300 }" [producto]="productoEditar" [categorias]="categorias" (alCerrar)="cerrarModal($event)"></app-producto-form>
+}
+@if (mostrarModalCat) {
+  <app-categoria-form [appAnime]="{ opacity: [0, 1], duration: 300 }" (alCerrar)="cerrarModalCat($event)"></app-categoria-form>
+}
 <app-footer></app-footer>

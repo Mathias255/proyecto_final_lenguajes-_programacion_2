@@ -19,5 +19,5 @@ export interface Usuario {
   nombre: string;
   email: string;
   password?: string;
-  rol: 'CLIENTE' | 'ADMIN';
+  rol: 'Cliente' | 'Administrador' | 'CLIENTE' | 'ADMIN';
 }
