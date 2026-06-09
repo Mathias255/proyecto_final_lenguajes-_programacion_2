@@ -1,0 +1,57 @@
+<app-navbar></app-navbar>
+
+<main class="container">
+  <div class="header">
+    <h1><i class="fas fa-shopping-bag"></i> Historial de Compras de Clientes</h1>
+    <p>Gestiona y revisa todas las transacciones realizadas en la tienda.</p>
+  </div>
+
+  <div class="compras-grid">
+    @for (compra of compras; track compra.id) {
+      <div class="card">
+        <div class="card-header" (click)="verDetalle(compra)">
+          <div class="info">
+            <span class="id">Orden #{{compra.id}}</span>
+            <span class="cliente">{{compra.usuario?.nombre || compra.usuario?.email}}</span>
+          </div>
+          <div class="meta">
+            <span class="fecha">{{compra.fecha | date:'dd/MM/yyyy HH:mm'}}</span>
+            <span class="total">${{compra.total}}</span>
+            <i class="fas" [class.fa-chevron-up]="compraSeleccionada?.id === compra.id" [class.fa-chevron-down]="compraSeleccionada?.id !== compra.id"></i>
+          </div>
+        </div>
+
+        @if (compraSeleccionada?.id === compra.id) {
+          <div class="card-detail">
+            <table>
+              <thead>
+                <tr>
+                  <th>Producto</th>
+                  <th>Cant.</th>
+                  <th>Precio Unit.</th>
+                  <th>Subtotal</th>
+                </tr>
+              </thead>
+              <tbody>
+                @for (det of compra.detalles; track det.id) {
+                  <tr>
+                    <td>{{det.producto?.nombre}}</td>
+                    <td>{{det.cantidad}}</td>
+                    <td>${{det.precioUnitario}}</td>
+                    <td>${{det.cantidad * det.precioUnitario}}</td>
+                  </tr>
+                }
+              </tbody>
+            </table>
+          </div>
+        }
+      </div>
+    } @empty {
+      <div class="empty-state">
+        <p>No se han registrado compras aún.</p>
+      </div>
+    }
+  </div>
+</main>
+
+<app-footer></app-footer>

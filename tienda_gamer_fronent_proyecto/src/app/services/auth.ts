@@ -19,23 +19,40 @@ export class AuthService {
     return this.currentUserSubject.value;
   }
 
-  login(usuario: Usuario) {
+  /**
+   * Guarda el usuario y el token JWT en localStorage.
+   */
+  login(usuario: Usuario, token?: string) {
     if (typeof window !== 'undefined') {
       localStorage.setItem('usuarioLogueado', JSON.stringify(usuario));
+      if (token) {
+        localStorage.setItem('authToken', token);
+      }
     }
     this.currentUserSubject.next(usuario);
+  }
+
+  /**
+   * Devuelve el token JWT almacenado, si existe.
+   */
+  getToken(): string | null {
+    if (typeof window !== 'undefined') {
+      return localStorage.getItem('authToken');
+    }
+    return null;
   }
 
   logout() {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('usuarioLogueado');
+      localStorage.removeItem('authToken');
     }
     this.currentUserSubject.next(null);
   }
 
   esAdmin(): boolean {
-    const rol = this.currentUserValue?.rol;
-    return rol === 'ADMIN' || rol === 'Administrador';
+    const rol = this.currentUserValue?.rol?.toUpperCase();
+    return rol === 'ADMIN' || rol === 'ADMINISTRADOR';
   }
 
   isLoggedIn(): boolean {

@@ -6,7 +6,7 @@
       <img [src]="producto.imagenUrl || 'https://via.placeholder.com/400'" [alt]="producto.nombre">
     </div>
     <div class="info-box">
-      <span class="category-tag">{{ producto.categoria.nombre }}</span>
+      <span class="category-tag">{{ producto.categoria?.nombre }}</span>
       <h1>{{ producto.nombre }}</h1>
       <p class="description">{{ producto.descripcion }}</p>
       

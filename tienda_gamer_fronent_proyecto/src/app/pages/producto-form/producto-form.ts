@@ -32,7 +32,7 @@ export class ProductoFormComponent implements OnInit {
   ngOnInit() {
     if (this.producto) {
       this.formProducto = { ...this.producto };
-      this.categoriaIdSeleccionada = this.producto.categoria.id;
+      this.categoriaIdSeleccionada = this.producto.categoria?.id ?? this.producto.categoriaId ?? 0;
     } else if (this.categorias.length > 0) {
       this.categoriaIdSeleccionada = this.categorias[0].id;
     }
@@ -42,6 +42,7 @@ export class ProductoFormComponent implements OnInit {
     const cat = this.categorias.find(c => c.id == this.categoriaIdSeleccionada);
     if (cat) {
       this.formProducto.categoria = cat;
+      this.formProducto.categoriaId = cat.id; // 🔥 Asignamos el ID plano para el DTO del backend
     }
 
     if (this.formProducto.id) {

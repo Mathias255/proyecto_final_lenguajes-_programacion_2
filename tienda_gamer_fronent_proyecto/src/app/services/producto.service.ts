@@ -29,7 +29,7 @@ export class ProductoService {
   }
 
   getProductosPorCategoria(categoriaId: number): Observable<Producto[]> {
-    return this.http.get<Producto[]>(`${this.apiUrl}/categoria/${categoriaId}`).pipe(
+    return this.http.get<Producto[]>(`${this.apiUrl}?categoriaId=${categoriaId}`).pipe(
       catchError(error => {
         console.error(`Error al obtener productos por categoría ${categoriaId}:`, error);
         return of([]);

@@ -7,8 +7,13 @@
 
     <form (ngSubmit)="onRegister()">
       <div class="input-group">
-        <label>Nombre Completo</label>
+        <label>Nombre</label>
         <input type="text" [(ngModel)]="usuario.nombre" name="nombre" placeholder="Tu nombre" required>
+      </div>
+
+      <div class="input-group">
+        <label>Apellido</label>
+        <input type="text" [(ngModel)]="usuario.apellido" name="apellido" placeholder="Tu apellido" required>
       </div>
 
       <div class="input-group">

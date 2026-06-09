@@ -5,6 +5,8 @@ import { ProductoDetalleComponent } from './pages/producto-detalle/producto-deta
 import { CarritoComponent } from './pages/carrito/carrito';
 import { LoginComponent } from './pages/login/login';
 import { RegistroComponent } from './pages/registro/registro';
+import { AdminComprasComponent } from './pages/admin-compras/admin-compras';
+import { adminGuard } from './guards/admin-guards';
 
 export const routes: Routes = [
   { path: 'home', component: HomeComponent },
@@ -13,6 +15,7 @@ export const routes: Routes = [
   { path: 'carrito', component: CarritoComponent },
   { path: 'login', component: LoginComponent },
   { path: 'registro', component: RegistroComponent },
+  { path: 'admin/compras', component: AdminComprasComponent, canActivate: [adminGuard] },
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   { path: '**', redirectTo: 'home' }
 ];

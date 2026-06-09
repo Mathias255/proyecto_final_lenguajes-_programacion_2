@@ -1,5 +1,6 @@
-import { Injectable, signal, computed } from '@angular/core';
+import { Injectable, signal, computed, inject } from '@angular/core';
 import { Producto } from '../models/interfaces';
+import { NotificationService } from './notification.service';
 
 export interface CartItem extends Producto {
   cantidad: number;
@@ -9,6 +10,7 @@ export interface CartItem extends Producto {
   providedIn: 'root'
 })
 export class CartService {
+  private notificationService = inject(NotificationService);
   private cartItems = signal<CartItem[]>([]);
 
   // Selectores
@@ -37,10 +39,14 @@ export class CartService {
       return [...prevItems, { ...producto, cantidad: 1 }];
     });
     
-    alert(`¡${producto.nombre} añadido al carrito!`);
+    this.notificationService.show(`¡${producto.nombre} añadido al carrito!`, 'success');
   }
 
   quitarProducto(id: number) {
+    const item = this.cartItems().find(i => i.id === id);
+    if (item) {
+      this.notificationService.show(`Eliminado: ${item.nombre}`, 'info');
+    }
     this.cartItems.update(prevItems => prevItems.filter(item => item.id !== id));
   }
 

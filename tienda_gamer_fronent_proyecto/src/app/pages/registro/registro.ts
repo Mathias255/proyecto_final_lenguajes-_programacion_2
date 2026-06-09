@@ -16,8 +16,9 @@ export class RegistroComponent {
   private usuarioService = inject(UsuarioService);
   private router = inject(Router);
 
-  usuario: Usuario = {
+  usuario: any = {
     nombre: '',
+    apellido: '',
     email: '',
     password: '',
     rol: 'Cliente'

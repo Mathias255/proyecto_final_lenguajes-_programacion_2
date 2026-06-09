@@ -9,6 +9,7 @@ import { ProductoService } from '../../services/producto.service';
 import { CategoriaService } from '../../services/categoria.service';
 import { AuthService } from '../../services/auth';
 import { CartService } from '../../services/cart';
+import { NotificationService } from '../../services/notification.service';
 import { Producto, Categoria } from '../../models/interfaces';
 import { AnimeDirective } from '../../directives/anime.directive';
 
@@ -24,6 +25,7 @@ export class CatalogoComponent implements OnInit {
   private categoriaService = inject(CategoriaService);
   private authService = inject(AuthService);
   private cartService = inject(CartService);
+  private notificationService = inject(NotificationService);
 
   productos: Producto[] = [];
   categorias: Categoria[] = [];
@@ -33,6 +35,8 @@ export class CatalogoComponent implements OnInit {
   mostrarModal = false;
   mostrarModalCat = false;
   productoEditar: Producto | null = null;
+
+  productosFiltrados: Producto[] = [];
 
   ngOnInit() {
     this.esAdmin = this.authService.esAdmin();
@@ -45,16 +49,26 @@ export class CatalogoComponent implements OnInit {
   }
 
   cargarProductos() {
-    if (this.categoriaSeleccionadaId) {
-      this.productoService.getProductosPorCategoria(this.categoriaSeleccionadaId).subscribe(prods => this.productos = prods);
-    } else {
-      this.productoService.getProductos().subscribe(prods => this.productos = prods);
-    }
+    this.productoService.getProductos().subscribe(prods => {
+      this.productos = prods;
+      this.aplicarFiltro();
+    });
   }
 
   seleccionarCategoria(id: number | null) {
     this.categoriaSeleccionadaId = id;
-    this.cargarProductos();
+    this.aplicarFiltro();
+  }
+
+  aplicarFiltro() {
+    if (this.categoriaSeleccionadaId) {
+      this.productosFiltrados = this.productos.filter(p => 
+        p.categoriaId === this.categoriaSeleccionadaId || 
+        p.categoria?.id === this.categoriaSeleccionadaId
+      );
+    } else {
+      this.productosFiltrados = [...this.productos];
+    }
   }
 
   agregarAlCarrito(prod: Producto, event: Event) {
@@ -76,10 +90,7 @@ export class CatalogoComponent implements OnInit {
   cerrarModal(producto: Producto | null) {
     this.mostrarModal = false;
     if (producto) {
-      // Si el componente ya guardó el producto, solo recargamos.
-      // Pero según la lógica actual del componente padre, él es quien llama al service.
-      // El usuario pidió: "Conecta el formulario... para que, al dar clic en el botón 'Guardar', realice un envío POST exitoso"
-      // Así que moveré la lógica de guardado a los componentes de formulario.
+      this.notificationService.show(this.productoEditar ? 'Producto actualizado' : 'Producto creado', 'success');
       this.cargarProductos();
     }
   }
@@ -87,6 +98,7 @@ export class CatalogoComponent implements OnInit {
   cerrarModalCat(cat: Categoria | null) {
     this.mostrarModalCat = false;
     if (cat) {
+      this.notificationService.show('Categoría creada', 'success');
       this.cargarCategorias();
     }
   }
@@ -94,7 +106,13 @@ export class CatalogoComponent implements OnInit {
   eliminarProducto(id: number | undefined, event: Event) {
     event.stopPropagation();
     if (id && confirm('¿Estás seguro de eliminar este producto?')) {
-      this.productoService.eliminarProducto(id).subscribe(() => this.cargarProductos());
+      this.productoService.eliminarProducto(id).subscribe({
+        next: () => {
+          this.notificationService.show('Producto eliminado', 'info');
+          this.cargarProductos();
+        },
+        error: () => this.notificationService.show('Error al eliminar', 'error')
+      });
     }
   }
 }

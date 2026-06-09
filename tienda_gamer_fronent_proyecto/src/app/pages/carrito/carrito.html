@@ -9,7 +9,7 @@
         <img [src]="item.imagenUrl || 'https://via.placeholder.com/100'" [alt]="item.nombre">
         <div class="item-info">
           <h4>{{ item.nombre }}</h4>
-          <p class="category">{{ item.categoria.nombre }}</p>
+          <p class="category">{{ item.categoria?.nombre }}</p>
           <span class="price-unit">${{ item.precio }} x unidad</span>
         </div>
         <div class="quantity-controls">
@@ -39,7 +39,7 @@
         <span>Total:</span>
         <span>${{ total() }}</span>
       </div>
-      <button class="btn-checkout">Finalizar Compra ⚡</button>
+      <button class="btn-checkout" (click)="finalizarCompra()">Finalizar Compra ⚡</button>
       <button class="btn-clear" (click)="vaciar()">Vaciar Carrito</button>
     </div>
   </div>

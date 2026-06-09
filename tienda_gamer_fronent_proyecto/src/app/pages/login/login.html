@@ -16,7 +16,9 @@
         <input type="password" [(ngModel)]="credenciales.password" name="password" placeholder="••••••••" required>
       </div>
 
-      <button type="submit" class="btn-submit">Ingresar ⚡</button>
+      <button type="submit" class="btn-submit" [disabled]="cargando">
+        {{ cargando ? 'Verificando...' : 'Ingresar ⚡' }}
+      </button>
     </form>
 
     <div class="social-login">

@@ -3,6 +3,8 @@
   <nav class="nav-links" [appAnime]="{ translateY: [-20, 0], opacity: [0, 1], delay: 200 }">
     <a routerLink="/home" routerLinkActive="active">Inicio</a>
     <a routerLink="/catalogo" routerLinkActive="active">Catálogo</a>
+    <a *ngIf="usuarioLogueado?.rol?.toUpperCase() === 'ADMIN' || usuarioLogueado?.rol?.toUpperCase() === 'ADMINISTRADOR'" 
+       routerLink="/admin/compras" routerLinkActive="active">Gestión Compras</a>
     <a routerLink="/carrito" class="cart-btn">
       Carrito 🛒 
       <span class="badge" *ngIf="totalCarrito() > 0">{{ totalCarrito() }}</span>
