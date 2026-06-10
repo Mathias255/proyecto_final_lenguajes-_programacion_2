@@ -4,6 +4,7 @@ import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ProductoService } from '../../services/producto.service';
 import { CartService } from '../../services/cart';
 import { AuthService } from '../../services/auth';
+import { NotificationService } from '../../services/notification.service';
 import { Producto } from '../../models/interfaces';
 import { NavbarComponent } from '../../components/navbar/navbar';
 import { FooterComponent } from '../../components/footer/footer';
