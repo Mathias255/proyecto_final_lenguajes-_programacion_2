@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { ProductoService } from '../../services/producto.service';
 import { CartService } from '../../services/cart';
+import { AuthService } from '../../services/auth';
 import { Producto } from '../../models/interfaces';
 import { NavbarComponent } from '../../components/navbar/navbar';
 import { FooterComponent } from '../../components/footer/footer';
@@ -18,8 +19,12 @@ export class ProductoDetalleComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private productoService = inject(ProductoService);
   private cartService = inject(CartService);
+  private authService = inject(AuthService);
+  private notificationService = inject(NotificationService);
 
   producto: Producto | null = null;
+  esAdmin = false;
+  usuarioLogueado: any = null;
 
   ngOnInit(): void {
     const id = Number(this.route.snapshot.paramMap.get('id'));
@@ -29,9 +34,18 @@ export class ProductoDetalleComponent implements OnInit {
         error: (err) => console.error('Error al cargar producto', err)
       });
     }
+
+    this.authService.currentUser.subscribe(user => {
+      this.usuarioLogueado = user;
+      this.esAdmin = user?.rol?.toUpperCase() === 'ADMIN' || user?.rol?.toUpperCase() === 'ADMINISTRADOR';
+    });
   }
 
   agregarAlCarrito() {
+    if (!this.usuarioLogueado) {
+      this.notificationService.show('¡Inicia sesión para añadir al carrito! 🎮', 'warning');
+      return;
+    }
     if (this.producto) {
       this.cartService.agregarProducto(this.producto);
     }

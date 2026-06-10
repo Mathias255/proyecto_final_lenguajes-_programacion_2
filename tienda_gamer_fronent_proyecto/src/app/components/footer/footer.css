@@ -1,1 +1,134 @@
-.footer { background-color: #0b0f19; text-align: center; padding: 20px; color: #6b7280; font-size: 14px; border-top: 1px solid #1f2937; margin-top: auto;}
+.footer {
+  background: #0a0a0c;
+  padding: 80px 5% 40px;
+  border-top: 1px solid #333;
+  margin-top: 50px;
+}
+
+.footer-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 50px;
+  max-width: 1200px;
+  margin: 0 auto 60px;
+}
+
+.footer-brand {
+  max-width: 350px;
+}
+
+.footer-brand .logo {
+  font-size: 1.8rem;
+  font-weight: 900;
+  margin-bottom: 20px;
+  letter-spacing: 2px;
+}
+
+.footer-brand p {
+  color: var(--text-dim);
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+
+.social-links {
+  display: flex;
+  gap: 15px;
+}
+
+.social-links a {
+  width: 40px;
+  height: 40px;
+  background: #16161a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  color: var(--text-dim);
+  font-size: 1.2rem;
+  transition: 0.3s;
+  border: 1px solid #333;
+}
+
+.social-links a:hover {
+  background: var(--primary);
+  color: var(--bg-dark);
+  border-color: var(--primary);
+  transform: translateY(-5px);
+}
+
+.footer-links {
+  display: flex;
+  gap: 60px;
+}
+
+.link-group h4 {
+  color: #fff;
+  font-size: 1.1rem;
+  margin-bottom: 25px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.link-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.link-group a {
+  color: var(--text-dim);
+  transition: 0.3s;
+  font-size: 0.9rem;
+}
+
+.link-group a:hover {
+  color: var(--primary);
+  padding-left: 5px;
+}
+
+.footer-bottom {
+  border-top: 1px solid #222;
+  padding-top: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-bottom p {
+  color: #555;
+  font-size: 0.85rem;
+}
+
+.payment-icons {
+  display: flex;
+  gap: 20px;
+  color: #444;
+  font-size: 1.5rem;
+}
+
+@media (max-width: 768px) {
+  .footer-container {
+    flex-direction: column;
+    text-align: center;
+  }
+  .footer-brand {
+    max-width: 100%;
+  }
+  .social-links {
+    justify-content: center;
+  }
+  .footer-links {
+    justify-content: center;
+    gap: 30px;
+    flex-wrap: wrap;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+}

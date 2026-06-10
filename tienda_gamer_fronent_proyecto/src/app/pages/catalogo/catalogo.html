@@ -1,57 +1,110 @@
 <app-navbar></app-navbar>
 
 <div class="catalogo-container">
+  <!-- Banner para Invitados -->
+  @if (!usuarioLogueado) {
+    <div class="guest-banner" [appAnime]="{ translateY: [-20, 0], opacity: [0, 1] }">
+      <div class="banner-content">
+        <i class="fas fa-rocket"></i>
+        <span>¡Vive la experiencia completa! <a routerLink="/login">Inicia sesión</a> o <a routerLink="/registro">Regístrate</a> para comprar y recibir ofertas exclusivas.</span>
+      </div>
+    </div>
+  }
+
+  <!-- Cabecera Premium con Filtros -->
+  <div class="catalogo-header">
+    <div class="search-bar">
+      <i class="fas fa-search"></i>
+      <input type="text" placeholder="Buscar hardware..." (input)="buscar($event)" [value]="filtroNombre">
+    </div>
+    <div class="sorting-controls">
+      <select (change)="cambiarOrden($event)">
+        <option value="default">Ordenar por...</option>
+        <option value="precio-asc">Precio: Menor a Mayor</option>
+        <option value="precio-desc">Precio: Mayor a Menor</option>
+        <option value="nombre-asc">Nombre: A-Z</option>
+        <option value="nombre-desc">Nombre: Z-A</option>
+      </select>
+    </div>
+  </div>
+
   <div class="layout">
     
+    <!-- Sidebar Mejorado -->
     <aside class="sidebar">
-      <div class="sidebar-header">
-        <h3>Líneas de Hardware</h3>
-      </div>
-      @if (esAdmin) {
-        <div class="sidebar-actions">
-          <button (click)="abrirModalCrear()" class="btn-create">➕ Producto</button>
-          <button (click)="mostrarModalCat = true" class="btn-create btn-cat">📁 Categoría</button>
-        </div>
-      }
-      <ul>
-        <li>
-          <button (click)="seleccionarCategoria(null)" [class.active]="categoriaSeleccionadaId === null">Ver Todo</button>
-        </li>
-        @for (cat of categorias; track cat.id) {
-          <li>
-            <button (click)="seleccionarCategoria(cat.id)" [class.active]="categoriaSeleccionadaId === cat.id">📁 {{ cat.nombre }}</button>
-          </li>
+      <div class="sidebar-section">
+        <h3><i class="fas fa-microchip"></i> Categorías</h3>
+        @if (esAdmin) {
+          <div class="admin-actions">
+            <button (click)="abrirModalCrear()" class="btn-admin-add">➕ Producto</button>
+            <button (click)="mostrarModalCat = true" class="btn-admin-add btn-alt">📁 Categoría</button>
+          </div>
         }
-      </ul>
+        <ul class="category-list">
+          <li>
+            <button (click)="seleccionarCategoria(null)" [class.active]="categoriaSeleccionadaId === null">
+              <i class="fas fa-th-large"></i> Todos los Productos
+            </button>
+          </li>
+          @for (cat of categorias; track cat.id) {
+            <li>
+              <button (click)="seleccionarCategoria(cat.id)" [class.active]="categoriaSeleccionadaId === cat.id">
+                <i class="fas fa-folder"></i> {{ cat.nombre }}
+              </button>
+            </li>
+          }
+        </ul>
+      </div>
     </aside>
 
+    <!-- Grid de Productos Premium -->
     <main class="content">
       <div class="grid">
         @for (prod of productosFiltrados; track prod.id) {
-          <div class="card" [routerLink]="['/producto', prod.id]" [appAnime]="{ scale: [0.9, 1], opacity: [0, 1], duration: 500 }">
-            <div class="card-img">
-              <img [src]="prod.imagenUrl || 'https://via.placeholder.com/200'" alt="Hardware">
+          <div class="card" [routerLink]="['/producto', prod.id]" [appAnime]="{ scale: [0.95, 1], opacity: [0, 1], duration: 400 }">
+            <div class="card-badge" *ngIf="prod.stock < 5">Bajo Stock</div>
+            <div class="card-img" (click)="abrirQuickView(prod, $event)">
+              <img [src]="prod.imagenUrl || 'https://via.placeholder.com/300x200?text=Hardware'" alt="Hardware">
+              <div class="img-overlay">
+                <span>Vista Rápida <i class="fas fa-search-plus"></i></span>
+              </div>
             </div>
             <div class="card-body">
-              <div>
+              <div class="card-info">
+                <span class="category-name">{{ prod.categoria?.nombre || 'General' }}</span>
                 <h4 class="prod-title">{{ prod.nombre }}</h4>
                 <p class="prod-desc">{{ prod.descripcion }}</p>
               </div>
-              <div class="card-footer">
-                <div class="meta">
-                  <span class="price">${{ prod.precio }}</span>
-                  <span class="stock">Stock: {{ prod.stock }}</span>
+              
+              <div class="card-footer-premium">
+                <div class="price-box">
+                  <span class="currency">$</span>
+                  <span class="amount">{{ prod.precio }}</span>
                 </div>
+                
                 <div class="actions">
                   @if (!esAdmin) {
-                    <button class="btn-cart-add" (click)="agregarAlCarrito(prod, $event)">Comprar 🛒</button>
+                    <button class="btn-buy-now" (click)="agregarAlCarrito(prod, $event)">
+                      <i class="fas fa-cart-plus"></i>
+                    </button>
                   } @else {
-                    <button (click)="abrirModalEditar(prod, $event)" class="btn-edit">✏️ Editar</button>
-                    <button (click)="eliminarProducto(prod.id, $event)" class="btn-delete">🗑️ Borrar</button>
+                    <button (click)="abrirModalEditar(prod, $event)" class="btn-action edit" title="Editar">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                    <button (click)="eliminarProducto(prod.id, $event)" class="btn-action delete" title="Eliminar">
+                      <i class="fas fa-trash-alt"></i>
+                    </button>
                   }
                 </div>
               </div>
             </div>
+          </div>
+        } @empty {
+          <div class="no-results" [appAnime]="{ opacity: [0, 1], translateY: [20, 0] }">
+            <i class="fas fa-search-minus"></i>
+            <h3>No encontramos lo que buscas</h3>
+            <p>Prueba con otros términos o cambia la categoría.</p>
+            <button (click)="filtroNombre = ''; seleccionarCategoria(null)" class="btn-reset">Ver Todo</button>
           </div>
         }
       </div>
@@ -61,9 +114,48 @@
 </div>
 
 @if (mostrarModal) {
-  <app-producto-form [appAnime]="{ opacity: [0, 1], duration: 300 }" [producto]="productoEditar" [categorias]="categorias" (alCerrar)="cerrarModal($event)"></app-producto-form>
+  <app-producto-form [appAnime]="{ opacity: [0, 1], scale: [0.9, 1], duration: 300 }" [producto]="productoEditar" [categorias]="categorias" (alCerrar)="cerrarModal($event)"></app-producto-form>
 }
 @if (mostrarModalCat) {
-  <app-categoria-form [appAnime]="{ opacity: [0, 1], duration: 300 }" (alCerrar)="cerrarModalCat($event)"></app-categoria-form>
+  <app-categoria-form [appAnime]="{ opacity: [0, 1], scale: [0.9, 1], duration: 300 }" (alCerrar)="cerrarModalCat($event)"></app-categoria-form>
 }
+
+<!-- Modal de Vista Rápida -->
+@if (mostrarModalDetalle && productoVer) {
+  <div class="quickview-overlay" (click)="cerrarQuickView()" [appAnime]="{ opacity: [0, 1], duration: 300 }">
+    <div class="quickview-card" (click)="$event.stopPropagation()" [appAnime]="{ scale: [0.8, 1], opacity: [0, 1], duration: 400 }">
+      <button class="btn-close" (click)="cerrarQuickView()">×</button>
+      
+      <div class="quickview-content">
+        <div class="qv-image">
+          <img [src]="productoVer.imagenUrl || 'https://via.placeholder.com/400'" [alt]="productoVer.nombre">
+        </div>
+        <div class="qv-info">
+          <span class="qv-category">{{ productoVer.categoria?.nombre || 'Hardware' }}</span>
+          <h2>{{ productoVer.nombre }}</h2>
+          <div class="qv-price">${{ productoVer.precio }}</div>
+          <p class="qv-desc">{{ productoVer.descripcion }}</p>
+          
+          <div class="qv-meta">
+            <span [class.low-stock]="productoVer.stock < 5">
+              <i class="fas fa-boxes"></i> Stock: {{ productoVer.stock }} unidades
+            </span>
+          </div>
+
+          <div class="qv-actions">
+            @if (!esAdmin) {
+              <button class="btn-qv-buy" (click)="agregarAlCarrito(productoVer, $event); cerrarQuickView()">
+                Añadir al Carrito 🛒
+              </button>
+            }
+            <button class="btn-qv-more" [routerLink]="['/producto', productoVer.id]" (click)="cerrarQuickView()">
+              Ver Detalles Completos
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+}
+
 <app-footer></app-footer>

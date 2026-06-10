@@ -5,7 +5,9 @@
     <a routerLink="/catalogo" routerLinkActive="active">Catálogo</a>
     <a *ngIf="usuarioLogueado?.rol?.toUpperCase() === 'ADMIN' || usuarioLogueado?.rol?.toUpperCase() === 'ADMINISTRADOR'" 
        routerLink="/admin/compras" routerLinkActive="active">Gestión Compras</a>
-    <a routerLink="/carrito" class="cart-btn">
+    
+    <a *ngIf="usuarioLogueado?.rol?.toUpperCase() !== 'ADMIN' && usuarioLogueado?.rol?.toUpperCase() !== 'ADMINISTRADOR'" 
+       routerLink="/carrito" class="cart-btn">
       Carrito 🛒 
       <span class="badge" *ngIf="totalCarrito() > 0">{{ totalCarrito() }}</span>
     </a>

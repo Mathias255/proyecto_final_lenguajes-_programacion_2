@@ -1,129 +1,196 @@
 .container {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 40px auto;
   padding: 0 20px;
-  min-height: 70vh;
+  min-height: 80vh;
 }
 
 .header {
-  margin-bottom: 30px;
-  border-left: 5px solid #00ff88;
+  margin-bottom: 40px;
+  border-left: 5px solid var(--primary);
   padding-left: 20px;
 }
 
 .header h1 {
-  margin: 0;
+  font-size: 2.2rem;
   color: #fff;
-  font-size: 2rem;
   text-transform: uppercase;
   letter-spacing: 2px;
+  margin: 0;
 }
 
 .header p {
-  color: #aaa;
+  color: var(--text-dim);
   margin-top: 5px;
 }
 
-.compras-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-}
-
-.card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+/* Estilos de la Tabla */
+.table-wrapper {
+  background: var(--bg-card);
   border-radius: 12px;
   overflow: hidden;
-  transition: all 0.3s ease;
+  border: 1px solid #333;
+  box-shadow: var(--shadow);
 }
 
-.card:hover {
-  border-color: #00ff88;
-  background: rgba(255, 255, 255, 0.08);
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.card-header {
-  padding: 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.admin-table thead th {
+  background: #1a1a20;
+  color: var(--primary);
+  text-align: left;
+  padding: 15px 20px;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-bottom: 2px solid #333;
+}
+
+.admin-table tbody tr {
+  border-bottom: 1px solid #222;
+  transition: background 0.2s;
   cursor: pointer;
 }
 
-.info {
-  display: flex;
-  flex-direction: column;
+.admin-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
 }
 
-.id {
-  color: #00ff88;
+.admin-table tbody tr.selected {
+  background: rgba(0, 242, 255, 0.05);
+  border-left: 4px solid var(--primary);
+}
+
+.admin-table td {
+  padding: 15px 20px;
+  vertical-align: middle;
+}
+
+/* Celdas específicas */
+.id-col {
+  color: var(--primary);
   font-weight: bold;
-  font-size: 0.9rem;
+  font-family: monospace;
 }
 
-.cliente {
-  color: #fff;
-  font-size: 1.1rem;
-  margin-top: 4px;
-}
-
-.meta {
+.user-cell {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 12px;
 }
 
-.fecha {
-  color: #888;
-  font-size: 0.9rem;
+.user-cell i {
+  font-size: 1.8rem;
+  color: var(--text-dim);
 }
 
-.total {
+.user-cell strong {
+  display: block;
   color: #fff;
-  font-weight: bold;
-  font-size: 1.2rem;
-  background: rgba(0, 255, 136, 0.2);
-  padding: 5px 15px;
-  border-radius: 20px;
 }
 
-.card-detail {
-  padding: 0 20px 20px;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+.user-cell span {
+  font-size: 0.8rem;
+  color: var(--text-dim);
+}
+
+.products-summary {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: 400px;
+}
+
+.product-tag {
+  background: #25252b;
+  color: #eee;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  border: 1px solid #333;
+}
+
+.price-col {
+  font-weight: bold;
+  color: var(--success);
+  font-size: 1.1rem;
+}
+
+.date-col {
+  color: #888;
+  font-size: 0.85rem;
+}
+
+/* Botón Eliminar */
+.btn-delete-small {
+  background: rgba(255, 0, 85, 0.1);
+  color: var(--accent);
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
+}
+
+.btn-delete-small:hover {
+  background: var(--accent);
+  color: #fff;
+  transform: scale(1.1);
+}
+
+/* Detalle Expandido */
+.detail-row {
+  background: #0f0f12 !important;
+}
+
+.expanded-detail {
+  padding: 20px 40px;
   animation: fadeIn 0.3s ease;
 }
 
-table {
+.expanded-detail h4 {
+  color: var(--primary);
+  margin-bottom: 15px;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+}
+
+.sub-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 15px;
+  background: #16161a;
+  border: 1px solid #333;
+  border-radius: 8px;
 }
 
-th {
+.sub-table th {
+  padding: 10px 15px;
   text-align: left;
+  font-size: 0.75rem;
   color: #888;
-  font-size: 0.8rem;
-  text-transform: uppercase;
-  padding: 10px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid #333;
 }
 
-td {
-  padding: 12px 10px;
-  color: #ddd;
-  font-size: 0.95rem;
+.sub-table td {
+  padding: 12px 15px;
+  font-size: 0.9rem;
+  border-bottom: 1px solid #222;
 }
 
-.empty-state {
+.text-right { text-align: right; }
+.text-center { text-align: center; }
+
+.empty-msg {
   text-align: center;
-  padding: 50px;
+  padding: 50px !important;
   color: #555;
-}
-
-.empty-state i {
-  font-size: 4rem;
-  margin-bottom: 15px;
+  font-style: italic;
 }
 
 @keyframes fadeIn {

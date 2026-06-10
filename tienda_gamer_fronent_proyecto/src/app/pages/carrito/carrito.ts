@@ -91,11 +91,12 @@ export class CarritoComponent {
       next: (res) => {
         if (res) {
           this.notificationService.show('¡Compra realizada con éxito!', 'success');
-          if (res.id) {
-            window.open(`http://localhost:8080/api/compras/${res.id}/factura`, '_blank');
-          }
           this.cartService.limpiarCarrito();
-          this.router.navigate(['/catalogo']);
+          if (res.id) {
+            this.router.navigate(['/compra-exito', res.id]);
+          } else {
+            this.router.navigate(['/catalogo']);
+          }
         } else {
           this.notificationService.show('Problema al procesar tu compra.', 'error');
         }

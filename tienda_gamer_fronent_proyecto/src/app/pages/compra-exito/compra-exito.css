@@ -1,0 +1,266 @@
+.container {
+  padding: 60px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 90vh;
+  background: radial-gradient(circle at top, #1a1a2e 0%, var(--bg-dark) 100%);
+}
+
+.invoice-wrapper {
+  background: #fff;
+  color: #333;
+  width: 100%;
+  max-width: 850px;
+  padding: 50px;
+  border-radius: 4px;
+  box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+  position: relative;
+}
+
+.invoice-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+  border-bottom: 3px solid #f0f0f0;
+  padding-bottom: 20px;
+}
+
+.logo-box {
+  background: #000;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.logo-icon {
+  font-size: 2rem;
+  color: var(--primary);
+}
+
+.brand h2 {
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: #111;
+  margin: 0;
+}
+
+.premium {
+  color: var(--secondary);
+  font-size: 0.9rem;
+  vertical-align: middle;
+  border: 1px solid var(--secondary);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.invoice-meta {
+  text-align: right;
+}
+
+.status-badge.paid {
+  background: #e6fff4;
+  color: #008a52;
+  padding: 6px 15px;
+  border-radius: 4px;
+  font-weight: 700;
+  font-size: 0.8rem;
+  margin-bottom: 15px;
+  display: inline-block;
+}
+
+.highlight {
+  color: var(--secondary);
+  font-weight: 800;
+}
+
+.billing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 30px;
+  margin-bottom: 40px;
+}
+
+.billing-card label {
+  font-size: 0.7rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  color: #999;
+  display: block;
+  margin-bottom: 8px;
+}
+
+.billing-card h3 {
+  font-size: 1.1rem;
+  margin: 0 0 5px 0;
+  color: #111;
+}
+
+.billing-card p {
+  font-size: 0.9rem;
+  color: #666;
+  margin: 0;
+}
+
+.items-container {
+  margin-bottom: 40px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  background: #f9f9f9;
+  padding: 15px;
+  text-align: left;
+  font-size: 0.75rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  border-bottom: 2px solid #111;
+}
+
+td {
+  padding: 20px 15px;
+  border-bottom: 1px solid #eee;
+}
+
+.item-name {
+  display: block;
+  font-weight: 700;
+  color: #111;
+  font-size: 1rem;
+}
+
+.item-sku {
+  font-size: 0.75rem;
+  color: #999;
+}
+
+.highlight-price {
+  font-weight: 700;
+  color: #111;
+}
+
+.summary-section {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 50px;
+  margin-bottom: 40px;
+}
+
+.legal-notice {
+  font-size: 0.8rem;
+  color: #888;
+  position: relative;
+}
+
+.watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(-15deg);
+  font-size: 5rem;
+  font-weight: 900;
+  color: rgba(0,0,0,0.03);
+  pointer-events: none;
+}
+
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.grand-total {
+  border-top: 2px solid #111;
+  padding-top: 15px;
+  margin-top: 10px;
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: #111;
+}
+
+.invoice-bottom {
+  text-align: center;
+  border-top: 1px solid #eee;
+  padding-top: 30px;
+  font-size: 0.9rem;
+  color: #999;
+}
+
+.actions-bar {
+  margin-top: 40px;
+  display: flex;
+  gap: 20px;
+}
+
+.btn-print, .btn-back {
+  padding: 15px 30px;
+  border-radius: 4px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  transition: all 0.2s;
+}
+
+.btn-print {
+  background: var(--primary);
+  color: #000;
+  box-shadow: 0 10px 20px rgba(0, 242, 255, 0.3);
+}
+
+.btn-back {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.btn-print:hover {
+  transform: translateY(-3px);
+  filter: brightness(1.1);
+}
+
+/* Error state */
+.error-container {
+  text-align: center;
+  color: #fff;
+  max-width: 500px;
+}
+
+.error-icon {
+  font-size: 4rem;
+  color: var(--accent);
+  margin-bottom: 20px;
+}
+
+.spinner {
+  width: 60px;
+  height: 60px;
+  border: 4px solid rgba(255,255,255,0.1);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 20px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media print {
+  @page { margin: 0; }
+  .no-print, app-navbar, app-footer { display: none !important; }
+  .container { background: #fff !important; padding: 0 !important; }
+  .invoice-wrapper { 
+    box-shadow: none !important; 
+    max-width: 100% !important; 
+    padding: 2cm !important;
+  }
+}

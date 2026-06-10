@@ -2,55 +2,88 @@
 
 <main class="container">
   <div class="header">
-    <h1><i class="fas fa-shopping-bag"></i> Historial de Compras de Clientes</h1>
-    <p>Gestiona y revisa todas las transacciones realizadas en la tienda.</p>
+    <h1><i class="fas fa-clipboard-list"></i> Panel de Gestión de Compras</h1>
+    <p>Visualiza, gestiona y elimina los registros de transacciones de la tienda.</p>
   </div>
 
-  <div class="compras-grid">
-    @for (compra of compras; track compra.id) {
-      <div class="card">
-        <div class="card-header" (click)="verDetalle(compra)">
-          <div class="info">
-            <span class="id">Orden #{{compra.id}}</span>
-            <span class="cliente">{{compra.usuario?.nombre || compra.usuario?.email}}</span>
-          </div>
-          <div class="meta">
-            <span class="fecha">{{compra.fecha | date:'dd/MM/yyyy HH:mm'}}</span>
-            <span class="total">${{compra.total}}</span>
-            <i class="fas" [class.fa-chevron-up]="compraSeleccionada?.id === compra.id" [class.fa-chevron-down]="compraSeleccionada?.id !== compra.id"></i>
-          </div>
-        </div>
-
-        @if (compraSeleccionada?.id === compra.id) {
-          <div class="card-detail">
-            <table>
-              <thead>
-                <tr>
-                  <th>Producto</th>
-                  <th>Cant.</th>
-                  <th>Precio Unit.</th>
-                  <th>Subtotal</th>
-                </tr>
-              </thead>
-              <tbody>
+  <div class="table-wrapper">
+    <table class="admin-table">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Cliente</th>
+          <th>Productos Adquiridos</th>
+          <th class="text-right">Total Pagado</th>
+          <th class="text-center">Fecha</th>
+          <th class="text-center">Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (compra of compras(); track compra.id) {
+          <tr [class.selected]="compraSeleccionada()?.id === compra.id" (click)="verDetalle(compra)">
+            <td class="id-col">#{{compra.id}}</td>
+            <td>
+              <div class="user-cell">
+                <i class="fas fa-user-circle"></i>
+                <div>
+                  <strong>{{compra.usuario.nombre}}</strong>
+                  <span>{{compra.usuario.email}}</span>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="products-summary">
                 @for (det of compra.detalles; track det.id) {
-                  <tr>
-                    <td>{{det.producto?.nombre}}</td>
-                    <td>{{det.cantidad}}</td>
-                    <td>${{det.precioUnitario}}</td>
-                    <td>${{det.cantidad * det.precioUnitario}}</td>
-                  </tr>
+                  <span class="product-tag">{{det.cantidad}}x {{det.producto.nombre}}</span>
                 }
-              </tbody>
-            </table>
-          </div>
+              </div>
+            </td>
+            <td class="text-right price-col">${{compra.total | number:'1.2-2'}}</td>
+            <td class="text-center date-col">{{compra.fecha | date:'dd/MM/yy HH:mm'}}</td>
+            <td class="text-center actions-col">
+              <button class="btn-delete-small" (click)="eliminarCompra(compra.id, $event)" title="Eliminar Registro">
+                <i class="fas fa-trash-alt"></i>
+              </button>
+            </td>
+          </tr>
+          
+          <!-- Fila de detalle expandible -->
+          @if (compraSeleccionada()?.id === compra.id) {
+            <tr class="detail-row">
+              <td colspan="6">
+                <div class="expanded-detail">
+                  <h4><i class="fas fa-info-circle"></i> Detalle Completo de la Orden</h4>
+                  <table class="sub-table">
+                    <thead>
+                      <tr>
+                        <th>Producto</th>
+                        <th class="text-center">Cantidad</th>
+                        <th class="text-right">Precio Unit.</th>
+                        <th class="text-right">Subtotal</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      @for (det of compra.detalles; track det.id) {
+                        <tr>
+                          <td>{{det.producto.nombre}}</td>
+                          <td class="text-center">{{det.cantidad}}</td>
+                          <td class="text-right">${{det.precioUnitario | number:'1.2-2'}}</td>
+                          <td class="text-right">${{det.cantidad * det.precioUnitario | number:'1.2-2'}}</td>
+                        </tr>
+                      }
+                    </tbody>
+                  </table>
+                </div>
+              </td>
+            </tr>
+          }
+        } @empty {
+          <tr>
+            <td colspan="6" class="empty-msg">No se han registrado compras en el sistema.</td>
+          </tr>
         }
-      </div>
-    } @empty {
-      <div class="empty-state">
-        <p>No se han registrado compras aún.</p>
-      </div>
-    }
+      </tbody>
+    </table>
   </div>
 </main>
 

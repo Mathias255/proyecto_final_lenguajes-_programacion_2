@@ -1,12 +1,104 @@
 <app-navbar></app-navbar>
-<div class="hero">
-  <div class="hero-content">
-    <h1>EL PODER DEL HARDWARE EN TUS MANOS</h1>
-    <p>Equípate con los mejores componentes del mercado y lleva tu juego al siguiente nivel.</p>
-    <div class="hero-btns">
-      <button routerLink="/catalogo" class="btn-hero">Explorar Tienda 🚀</button>
-      <button routerLink="/registro" class="btn-hero btn-hero-alt">Registrarse 🎮</button>
+
+<main>
+  <!-- Hero Section con Animación -->
+  <section class="hero">
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <div class="badge-new">NUEVA TEMPORADA 2026</div>
+      <h1>EL PODER DEL <span class="neon-text">HARDWARE</span> EN TUS MANOS</h1>
+      <p>Equípate con los mejores componentes de alto rendimiento y domina cada partida con tecnología de última generación.</p>
+      <div class="hero-btns">
+        <button routerLink="/catalogo" class="btn-hero">Explorar Tienda 🚀</button>
+        <button routerLink="/registro" class="btn-hero btn-hero-alt">Unirse a la Elite 🎮</button>
+      </div>
     </div>
-  </div>
-</div>
+  </section>
+
+  <!-- Stats Bar -->
+  <section class="stats-bar">
+    <div class="stat-item">
+      <span class="stat-num">15K+</span>
+      <span class="stat-label">Gamers Felices</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">500+</span>
+      <span class="stat-label">Productos Pro</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">24h</span>
+      <span class="stat-label">Envío Express</span>
+    </div>
+    <div class="stat-item">
+      <span class="stat-num">2 Años</span>
+      <span class="stat-label">Garantía Real</span>
+    </div>
+  </section>
+
+  <!-- Categorías Destacadas -->
+  <section class="featured-categories container">
+    <div class="section-title">
+      <h2>EQUIPAMIENTO POR <span class="primary-gradient-text">CATEGORÍA</span></h2>
+      <p>Selecciona tu especialidad y encuentra el hardware perfecto.</p>
+    </div>
+    <div class="cat-grid">
+      <div class="cat-card" routerLink="/catalogo">
+        <i class="fas fa-keyboard"></i>
+        <h3>Periféricos</h3>
+        <span>Ver 120+ productos</span>
+      </div>
+      <div class="cat-card" routerLink="/catalogo">
+        <i class="fas fa-desktop"></i>
+        <h3>Monitores</h3>
+        <span>Ver 45+ productos</span>
+      </div>
+      <div class="cat-card" routerLink="/catalogo">
+        <i class="fas fa-microchip"></i>
+        <h3>Componentes</h3>
+        <span>Ver 200+ productos</span>
+      </div>
+      <div class="cat-card" routerLink="/catalogo">
+        <i class="fas fa-headphones"></i>
+        <h3>Audio Pro</h3>
+        <span>Ver 80+ productos</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- Beneficios Premium -->
+  <section class="benefits">
+    <div class="container benefit-grid">
+      <div class="benefit-item">
+        <div class="icon-box"><i class="fas fa-shipping-fast"></i></div>
+        <h4>Despacho Ultra Veloz</h4>
+        <p>Entregamos tu setup en tiempo récord directamente a tu puerta.</p>
+      </div>
+      <div class="benefit-item">
+        <div class="icon-box"><i class="fas fa-shield-alt"></i></div>
+        <h4>Garantía de Por Vida</h4>
+        <p>Todos nuestros componentes cuentan con respaldo técnico oficial.</p>
+      </div>
+      <div class="benefit-item">
+        <div class="icon-box"><i class="fas fa-headset"></i></div>
+        <h4>Soporte Técnico 24/7</h4>
+        <p>Nuestros expertos están listos para ayudarte con tu configuración.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action Banner -->
+  <section class="cta-banner container">
+    <div class="cta-card">
+      <div class="cta-info">
+        <h3>¿LISTO PARA EL SIGUIENTE NIVEL?</h3>
+        <p>Regístrate hoy y obtén un 10% de descuento en tu primera compra de periféricos.</p>
+        <button routerLink="/registro" class="btn-hero">Empezar Ahora</button>
+      </div>
+      <div class="cta-image">
+        <i class="fas fa-trophy trophy-icon"></i>
+      </div>
+    </div>
+  </section>
+</main>
+
 <app-footer></app-footer>

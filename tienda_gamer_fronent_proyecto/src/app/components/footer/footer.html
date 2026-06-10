@@ -1,3 +1,45 @@
-<footer class="footer" [appAnime]="{ opacity: [0, 1], duration: 1500 }">
-  <p>© 2026 Gamer Shop Hardware. Powered by Spring Boot & Angular Standalone.</p>
+<footer class="footer" [appAnime]="{ opacity: [0, 1], duration: 1500, delay: 2000 }">
+  <div class="footer-container">
+    <div class="footer-brand">
+      <h2 class="logo">🎮 GAMER SHOP</h2>
+      <p>Líderes en hardware de alto rendimiento para entusiastas y profesionales.</p>
+      <div class="social-links">
+        <a href="#"><i class="fab fa-discord"></i></a>
+        <a href="#"><i class="fab fa-instagram"></i></a>
+        <a href="#"><i class="fab fa-twitter"></i></a>
+        <a href="#"><i class="fab fa-twitch"></i></a>
+      </div>
+    </div>
+
+    <div class="footer-links">
+      <div class="link-group">
+        <h4>Tienda</h4>
+        <a routerLink="/catalogo">Catálogo</a>
+        <a routerLink="/home">Novedades</a>
+        <a routerLink="/catalogo">Ofertas</a>
+      </div>
+      <div class="link-group">
+        <h4>Soporte</h4>
+        <a href="#">Garantía</a>
+        <a href="#">Envíos</a>
+        <a href="#">FAQ</a>
+      </div>
+      <div class="link-group">
+        <h4>Legal</h4>
+        <a href="#">Términos</a>
+        <a href="#">Privacidad</a>
+        <a href="#">Cookies</a>
+      </div>
+    </div>
+  </div>
+  
+  <div class="footer-bottom">
+    <p>© 2026 Gamer Shop Hardware. Extreme Performance for Elite Players.</p>
+    <div class="payment-icons">
+      <i class="fab fa-cc-visa"></i>
+      <i class="fab fa-cc-mastercard"></i>
+      <i class="fab fa-cc-paypal"></i>
+      <i class="fab fa-bitcoin"></i>
+    </div>
+  </div>
 </footer>

@@ -31,15 +31,23 @@ export class CatalogoComponent implements OnInit {
   categorias: Categoria[] = [];
   categoriaSeleccionadaId: number | null = null;
   esAdmin = false;
+  usuarioLogueado: any = null;
   
   mostrarModal = false;
   mostrarModalCat = false;
+  mostrarModalDetalle = false; // Nuevo modal de vista rápida
   productoEditar: Producto | null = null;
+  productoVer: Producto | null = null; // Producto para vista rápida
 
   productosFiltrados: Producto[] = [];
+  
+  // Nuevos filtros
+  filtroNombre = '';
+  ordenSeleccionado = 'default';
 
   ngOnInit() {
     this.esAdmin = this.authService.esAdmin();
+    this.authService.currentUser.subscribe(user => this.usuarioLogueado = user);
     this.cargarCategorias();
     this.cargarProductos();
   }
@@ -51,28 +59,70 @@ export class CatalogoComponent implements OnInit {
   cargarProductos() {
     this.productoService.getProductos().subscribe(prods => {
       this.productos = prods;
-      this.aplicarFiltro();
+      this.aplicarFiltros();
     });
   }
 
   seleccionarCategoria(id: number | null) {
     this.categoriaSeleccionadaId = id;
-    this.aplicarFiltro();
+    this.aplicarFiltros();
   }
 
-  aplicarFiltro() {
+  buscar(event: any) {
+    this.filtroNombre = event.target.value;
+    this.aplicarFiltros();
+  }
+
+  cambiarOrden(event: any) {
+    this.ordenSeleccionado = event.target.value;
+    this.aplicarFiltros();
+  }
+
+  aplicarFiltros() {
+    let resultado = [...this.productos];
+
+    // Filtro por categoría
     if (this.categoriaSeleccionadaId) {
-      this.productosFiltrados = this.productos.filter(p => 
+      resultado = resultado.filter(p => 
         p.categoriaId === this.categoriaSeleccionadaId || 
         p.categoria?.id === this.categoriaSeleccionadaId
       );
-    } else {
-      this.productosFiltrados = [...this.productos];
     }
+
+    // Filtro por nombre
+    if (this.filtroNombre) {
+      const busqueda = this.filtroNombre.toLowerCase();
+      resultado = resultado.filter(p => 
+        p.nombre.toLowerCase().includes(busqueda) || 
+        p.descripcion.toLowerCase().includes(busqueda)
+      );
+    }
+
+    // Ordenamiento
+    switch (this.ordenSeleccionado) {
+      case 'precio-asc':
+        resultado.sort((a, b) => a.precio - b.precio);
+        break;
+      case 'precio-desc':
+        resultado.sort((a, b) => b.precio - a.precio);
+        break;
+      case 'nombre-asc':
+        resultado.sort((a, b) => a.nombre.localeCompare(b.nombre));
+        break;
+      case 'nombre-desc':
+        resultado.sort((a, b) => b.nombre.localeCompare(a.nombre));
+        break;
+    }
+
+    this.productosFiltrados = resultado;
   }
 
   agregarAlCarrito(prod: Producto, event: Event) {
     event.stopPropagation();
+    if (!this.usuarioLogueado) {
+      this.notificationService.show('¡Inicia sesión o regístrate para comprar! 🎮', 'warning');
+      return;
+    }
     this.cartService.agregarProducto(prod);
   }
 
@@ -85,6 +135,12 @@ export class CatalogoComponent implements OnInit {
     event.stopPropagation();
     this.productoEditar = prod;
     this.mostrarModal = true;
+  }
+
+  abrirQuickView(prod: Producto, event: Event) {
+    event.stopPropagation();
+    this.productoVer = prod;
+    this.mostrarModalDetalle = true;
   }
 
   cerrarModal(producto: Producto | null) {
@@ -101,6 +157,11 @@ export class CatalogoComponent implements OnInit {
       this.notificationService.show('Categoría creada', 'success');
       this.cargarCategorias();
     }
+  }
+
+  cerrarQuickView() {
+    this.mostrarModalDetalle = false;
+    this.productoVer = null;
   }
 
   eliminarProducto(id: number | undefined, event: Event) {

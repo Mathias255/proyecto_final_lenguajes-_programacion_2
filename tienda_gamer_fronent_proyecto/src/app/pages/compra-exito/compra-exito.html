@@ -1,0 +1,123 @@
+<app-navbar></app-navbar>
+
+<main class="container">
+  @if (loading()) {
+    <div class="loading-state">
+      <div class="spinner"></div>
+      <p>Generando tu comprobante de alta gama...</p>
+    </div>
+  } @else if (compra()) {
+    @let c = compra()!;
+    <div class="invoice-wrapper" id="invoice">
+      <div class="invoice-header">
+        <div class="brand">
+          <div class="logo-box">
+            <i class="fas fa-microchip logo-icon"></i>
+          </div>
+          <div>
+            <h2>TIENDA GAMER <span class="premium">PREMIUM</span></h2>
+            <p>Facturación Electrónica Autorizada</p>
+          </div>
+        </div>
+        <div class="invoice-meta">
+          <div class="status-badge paid">
+            <i class="fas fa-check-circle"></i> TRANSACCIÓN COMPLETADA
+          </div>
+          <p><strong>N° Recibo:</strong> <span class="highlight">#{{c.id}}</span></p>
+          <p><strong>Fecha Emisión:</strong> {{c.fecha | date:'dd/MM/yyyy HH:mm'}}</p>
+        </div>
+      </div>
+
+      <div class="billing-grid">
+        <div class="billing-card">
+          <label><i class="fas fa-user"></i> Cliente</label>
+          <h3>{{c.usuario.nombre}}</h3>
+          <p>{{c.usuario.email}}</p>
+        </div>
+        <div class="billing-card">
+          <label><i class="fas fa-building"></i> Emisor</label>
+          <h3>Tienda Gamer S.A.</h3>
+          <p>Tech District, Silicon Valley</p>
+        </div>
+        <div class="billing-card">
+          <label><i class="fas fa-credit-card"></i> Pago</label>
+          <p>Pasarela Digital Segura</p>
+          <p>ID Transacción: TXN-{{c.id}}992</p>
+        </div>
+      </div>
+
+      <div class="items-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Descripción del Hardware</th>
+              <th class="text-center">Cant.</th>
+              <th class="text-right">Unitario</th>
+              <th class="text-right">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            @for (det of c.detalles; track det.id) {
+              <tr>
+                <td>
+                  <div class="item-detail">
+                    <span class="item-name">{{det.producto.nombre}}</span>
+                    <span class="item-sku">SKU: {{det.producto.id}}00-GT</span>
+                  </div>
+                </td>
+                <td class="text-center">{{det.cantidad}}</td>
+                <td class="text-right">${{det.precioUnitario | number:'1.2-2'}}</td>
+                <td class="text-right highlight-price">${{det.cantidad * det.precioUnitario | number:'1.2-2'}}</td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <div class="summary-section">
+        <div class="legal-notice">
+          <p>Este documento es un comprobante válido de compra. Los productos cuentan con garantía limitada de 2 años por defectos de fábrica. Conserve este recibo para cualquier reclamo.</p>
+          <div class="watermark">ORIGINAL</div>
+        </div>
+        <div class="totals-table">
+          <div class="total-row">
+            <span>Base Imponible</span>
+            <span>${{c.total * 0.81 | number:'1.2-2'}}</span>
+          </div>
+          <div class="total-row">
+            <span>IVA (19%)</span>
+            <span>${{c.total * 0.19 | number:'1.2-2'}}</span>
+          </div>
+          <div class="total-row grand-total">
+            <span>TOTAL A PAGAR</span>
+            <span>${{c.total | number:'1.2-2'}}</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="invoice-bottom">
+        <p>Gracias por confiar en <strong>Tienda Gamer</strong> para llevar tu setup al siguiente nivel.</p>
+      </div>
+    </div>
+
+    <div class="actions-bar no-print">
+      <button class="btn-back" routerLink="/catalogo">
+        <i class="fas fa-arrow-left"></i> Volver a la Tienda
+      </button>
+      <button class="btn-print" (click)="imprimir()">
+        <i class="fas fa-file-pdf"></i> Descargar / Imprimir Factura
+      </button>
+    </div>
+  } @else if (error()) {
+    <div class="error-container">
+      <div class="error-icon">
+        <i class="fas fa-exclamation-triangle"></i>
+      </div>
+      <h2>Error al cargar el comprobante</h2>
+      <p>Hubo un problema de conexión con el servidor. Tu compra fue procesada, pero no pudimos generar la vista en este momento.</p>
+      <button routerLink="/catalogo" class="btn-print">Ir al Catálogo</button>
+    </div>
+  }
+</main>
+
+<app-footer></app-footer>

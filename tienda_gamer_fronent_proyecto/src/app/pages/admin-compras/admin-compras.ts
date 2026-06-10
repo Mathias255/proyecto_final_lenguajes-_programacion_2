@@ -1,9 +1,10 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CompraService } from '../../services/compra.service';
 import { Compra } from '../../models/interfaces';
 import { NavbarComponent } from '../../components/navbar/navbar';
 import { FooterComponent } from '../../components/footer/footer';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-admin-compras',
@@ -14,8 +15,10 @@ import { FooterComponent } from '../../components/footer/footer';
 })
 export class AdminComprasComponent implements OnInit {
   private compraService = inject(CompraService);
-  compras: Compra[] = [];
-  compraSeleccionada: Compra | null = null;
+  private notificationService = inject(NotificationService);
+  
+  compras = signal<Compra[]>([]);
+  compraSeleccionada = signal<Compra | null>(null);
 
   ngOnInit() {
     this.cargarCompras();
@@ -23,11 +26,28 @@ export class AdminComprasComponent implements OnInit {
 
   cargarCompras() {
     this.compraService.getCompras().subscribe(data => {
-      this.compras = data;
+      this.compras.set(data);
     });
   }
 
   verDetalle(compra: Compra) {
-    this.compraSeleccionada = (this.compraSeleccionada?.id === compra.id) ? null : compra;
+    const actual = this.compraSeleccionada();
+    this.compraSeleccionada.set(actual?.id === compra.id ? null : compra);
+  }
+
+  eliminarCompra(id: number | undefined, event: Event) {
+    event.stopPropagation();
+    if (!id) return;
+    
+    if (confirm('¿Estás seguro de que deseas eliminar este registro de compra?')) {
+      this.compraService.eliminarCompra(id).subscribe(exito => {
+        if (exito) {
+          this.notificationService.show('Compra eliminada correctamente', 'success');
+          this.cargarCompras();
+        } else {
+          this.notificationService.show('Error al eliminar la compra', 'error');
+        }
+      });
+    }
   }
 }
