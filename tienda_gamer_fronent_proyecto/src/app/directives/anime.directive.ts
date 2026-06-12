@@ -15,7 +15,7 @@ export class AnimeDirective {
 
       animate(finalTargets, {
         duration: 1000,
-        ease: 'outExpo',
+        easing: 'outExpo',
         ...rest
       });
     });

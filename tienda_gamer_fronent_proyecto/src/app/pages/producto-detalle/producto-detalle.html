@@ -15,7 +15,7 @@
         <span class="stock" [class.low-stock]="producto.stock < 5">Stock disponible: {{ producto.stock }}</span>
       </div>
 
-      <button *ngIf="!esAdmin" class="btn-buy" (click)="agregarAlCarrito()">Añadir al Carrito 🛒</button>
+      <button *ngIf="!esAdmin()" class="btn-buy" (click)="agregarAlCarrito()">Añadir al Carrito 🛒</button>
       <button routerLink="/catalogo" class="btn-back">Volver al Catálogo</button>
     </div>
   </div>

@@ -1,61 +1,115 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject, signal, computed } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { Usuario } from '../models/interfaces';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
+
+export interface LoginResponse {
+  token: string;
+  id: number;
+  nombre: string;
+  apellido?: string; // Agregado por si el backend lo envía
+  email: string;
+  rol: 'ADMIN' | 'CLIENTE';
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private currentUserSubject: BehaviorSubject<Usuario | null>;
-  public currentUser: Observable<Usuario | null>;
+  private http = inject(HttpClient);
+  private router = inject(Router);
+  private apiUrl = 'http://localhost:8080/api/auth/login';
 
-  constructor() {
-    const savedUser = typeof window !== 'undefined' ? localStorage.getItem('usuarioLogueado') : null;
-    this.currentUserSubject = new BehaviorSubject<Usuario | null>(savedUser ? JSON.parse(savedUser) : null);
-    this.currentUser = this.currentUserSubject.asObservable();
-  }
+  // Usamos un Signal para manejar el estado reactivo del usuario (Angular 17+)
+  private currentUserSignal = signal<Usuario | null>(this.getUsuarioDesdeStorage());
 
-  public get currentUserValue(): Usuario | null {
-    return this.currentUserSubject.value;
-  }
+  // Exponemos el usuario como un signal de solo lectura
+  public currentUser = computed(() => this.currentUserSignal());
 
-  /**
-   * Guarda el usuario y el token JWT en localStorage.
-   */
-  login(usuario: Usuario, token?: string) {
+  private getUsuarioDesdeStorage(): Usuario | null {
     if (typeof window !== 'undefined') {
-      localStorage.setItem('usuarioLogueado', JSON.stringify(usuario));
-      if (token) {
-        localStorage.setItem('authToken', token);
-      }
-    }
-    this.currentUserSubject.next(usuario);
-  }
-
-  /**
-   * Devuelve el token JWT almacenado, si existe.
-   */
-  getToken(): string | null {
-    if (typeof window !== 'undefined') {
-      return localStorage.getItem('authToken');
+      const savedUser = localStorage.getItem('usuarioLogueado');
+      return savedUser ? JSON.parse(savedUser) : null;
     }
     return null;
+  }
+
+  /**
+   * Envía las credenciales al backend y almacena la sesión.
+   */
+  login(email: string, password: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(this.apiUrl, { email, password }).pipe(
+      tap(response => {
+        if (response && response.token) {
+          const usuario: Usuario = {
+            id: response.id,
+            nombre: response.nombre,
+            apellido: response.apellido || '', // Mapeo del nuevo campo
+            email: response.email,
+            rol: response.rol
+          };
+          this.setSession(response.token, usuario);
+        }
+      })
+    );
+  }
+
+  private setSession(token: string, usuario: Usuario) {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('authToken', token);
+      localStorage.setItem('usuarioLogueado', JSON.stringify(usuario));
+      localStorage.setItem('userRole', usuario.rol);
+      this.currentUserSignal.set(usuario);
+    }
+  }
+
+  getToken(): string | null {
+    return typeof window !== 'undefined' ? localStorage.getItem('authToken') : null;
+  }
+
+  getRol(): string | null {
+    return typeof window !== 'undefined' ? localStorage.getItem('userRole') : null;
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.getToken();
+  }
+
+  hasRole(requiredRole: string): boolean {
+    const user = this.currentUserSignal();
+    const rol = user?.rol?.toUpperCase();
+    
+    if (requiredRole.toUpperCase() === 'ADMIN') {
+      return rol === 'ADMIN' || rol === 'ADMINISTRADOR';
+    }
+    
+    return rol === requiredRole.toUpperCase();
+  }
+
+  /**
+   * Actualiza los datos del usuario en la sesión actual.
+   */
+  updateUser(usuario: Usuario) {
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('usuarioLogueado', JSON.stringify(usuario));
+      localStorage.setItem('userRole', usuario.rol);
+      this.currentUserSignal.set(usuario);
+    }
   }
 
   logout() {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('usuarioLogueado');
       localStorage.removeItem('authToken');
+      localStorage.removeItem('userRole');
+      this.currentUserSignal.set(null);
+      this.router.navigate(['/login']);
     }
-    this.currentUserSubject.next(null);
   }
 
-  esAdmin(): boolean {
-    const rol = this.currentUserValue?.rol?.toUpperCase();
-    return rol === 'ADMIN' || rol === 'ADMINISTRADOR';
-  }
-
-  isLoggedIn(): boolean {
-    return !!this.currentUserValue;
+  // Mantener compatibilidad con código que use currentUserValue
+  get currentUserValue(): Usuario | null {
+    return this.currentUserSignal();
   }
 }

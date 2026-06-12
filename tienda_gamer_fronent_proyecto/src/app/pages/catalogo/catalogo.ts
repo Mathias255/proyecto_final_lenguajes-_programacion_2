@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { NavbarComponent } from '../../components/navbar/navbar';
@@ -30,8 +30,10 @@ export class CatalogoComponent implements OnInit {
   productos: Producto[] = [];
   categorias: Categoria[] = [];
   categoriaSeleccionadaId: number | null = null;
-  esAdmin = false;
-  usuarioLogueado: any = null;
+  
+  // Usamos signals/computed para reactividad
+  usuarioLogueado = this.authService.currentUser;
+  esAdmin = computed(() => this.authService.hasRole('ADMIN'));
   
   mostrarModal = false;
   mostrarModalCat = false;
@@ -46,8 +48,6 @@ export class CatalogoComponent implements OnInit {
   ordenSeleccionado = 'default';
 
   ngOnInit() {
-    this.esAdmin = this.authService.esAdmin();
-    this.authService.currentUser.subscribe(user => this.usuarioLogueado = user);
     this.cargarCategorias();
     this.cargarProductos();
   }
@@ -57,9 +57,12 @@ export class CatalogoComponent implements OnInit {
   }
 
   cargarProductos() {
+    console.log('Cargando productos desde:', this.productoService.getProductos());
     this.productoService.getProductos().subscribe(prods => {
+      console.log('PRODUCTOS RECIBIDOS:', prods);
       this.productos = prods;
       this.aplicarFiltros();
+      console.log('PRODUCTOS FILTRADOS:', this.productosFiltrados);
     });
   }
 
@@ -119,7 +122,7 @@ export class CatalogoComponent implements OnInit {
 
   agregarAlCarrito(prod: Producto, event: Event) {
     event.stopPropagation();
-    if (!this.usuarioLogueado) {
+    if (!this.usuarioLogueado()) {
       this.notificationService.show('¡Inicia sesión o regístrate para comprar! 🎮', 'warning');
       return;
     }
@@ -172,7 +175,11 @@ export class CatalogoComponent implements OnInit {
           this.notificationService.show('Producto eliminado', 'info');
           this.cargarProductos();
         },
-        error: () => this.notificationService.show('Error al eliminar', 'error')
+        error: (err) => {
+          const msg = err.error?.error || 'El producto está asociado a una compra y no se puede borrar.';
+          this.notificationService.show(msg, 'error');
+          console.error('Error al eliminar:', err);
+        }
       });
     }
   }

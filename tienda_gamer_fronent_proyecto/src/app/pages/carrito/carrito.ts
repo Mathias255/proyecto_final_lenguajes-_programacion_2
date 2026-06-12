@@ -46,7 +46,7 @@ export class CarritoComponent {
         next: (usuarios) => {
           const encontrado = usuarios.find(u => u.email === usuario?.email);
           if (encontrado && encontrado.id) {
-            this.authService.login(encontrado);
+            this.authService.updateUser(encontrado);
             this.procesarEnvioCompra(encontrado);
           } else {
             this.notificationService.show('No se pudo recuperar tu ID de usuario.', 'error');

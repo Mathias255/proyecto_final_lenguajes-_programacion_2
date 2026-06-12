@@ -2,7 +2,7 @@
 
 <div class="catalogo-container">
   <!-- Banner para Invitados -->
-  @if (!usuarioLogueado) {
+  @if (!usuarioLogueado()) {
     <div class="guest-banner" [appAnime]="{ translateY: [-20, 0], opacity: [0, 1] }">
       <div class="banner-content">
         <i class="fas fa-rocket"></i>
@@ -34,7 +34,7 @@
     <aside class="sidebar">
       <div class="sidebar-section">
         <h3><i class="fas fa-microchip"></i> Categorías</h3>
-        @if (esAdmin) {
+        @if (esAdmin()) {
           <div class="admin-actions">
             <button (click)="abrirModalCrear()" class="btn-admin-add">➕ Producto</button>
             <button (click)="mostrarModalCat = true" class="btn-admin-add btn-alt">📁 Categoría</button>
@@ -83,7 +83,7 @@
                 </div>
                 
                 <div class="actions">
-                  @if (!esAdmin) {
+                  @if (!esAdmin()) {
                     <button class="btn-buy-now" (click)="agregarAlCarrito(prod, $event)">
                       <i class="fas fa-cart-plus"></i>
                     </button>
@@ -143,7 +143,7 @@
           </div>
 
           <div class="qv-actions">
-            @if (!esAdmin) {
+            @if (!esAdmin()) {
               <button class="btn-qv-buy" (click)="agregarAlCarrito(productoVer, $event); cerrarQuickView()">
                 Añadir al Carrito 🛒
               </button>

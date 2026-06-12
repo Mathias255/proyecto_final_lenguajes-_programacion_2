@@ -18,6 +18,7 @@ export interface Producto {
 export interface Usuario {
   id?: number;
   nombre: string;
+  apellido: string; // 🔥 Nuevo campo obligatorio
   email: string;
   password?: string;
   rol: 'Cliente' | 'Administrador' | 'CLIENTE' | 'ADMIN';

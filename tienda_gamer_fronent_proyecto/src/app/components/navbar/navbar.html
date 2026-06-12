@@ -2,25 +2,34 @@
   <h1 class="logo" routerLink="/home" [appAnime]="{ translateY: [-20, 0], opacity: [0, 1] }">🎮 GAMER SHOP</h1>
   <nav class="nav-links" [appAnime]="{ translateY: [-20, 0], opacity: [0, 1], delay: 200 }">
     <a routerLink="/home" routerLinkActive="active">Inicio</a>
-    <a routerLink="/catalogo" routerLinkActive="active">Catálogo</a>
-    <a *ngIf="usuarioLogueado?.rol?.toUpperCase() === 'ADMIN' || usuarioLogueado?.rol?.toUpperCase() === 'ADMINISTRADOR'" 
-       routerLink="/admin/compras" routerLinkActive="active">Gestión Compras</a>
-    
-    <a *ngIf="usuarioLogueado?.rol?.toUpperCase() !== 'ADMIN' && usuarioLogueado?.rol?.toUpperCase() !== 'ADMINISTRADOR'" 
-       routerLink="/carrito" class="cart-btn">
-      Carrito 🛒 
-      <span class="badge" *ngIf="totalCarrito() > 0">{{ totalCarrito() }}</span>
-    </a>
+    <a routerLink="/catalogo" routerLinkActive="active">Ver Catálogo</a>
+
+    @if (esAdmin()) {
+      <a routerLink="/admin/compras" routerLinkActive="active">Panel de Administración</a>
+      <a routerLink="/admin/auditoria" routerLinkActive="active">Ver Auditoría de Accesos</a>
+    }
+
+    @if (!esAdmin()) {
+      <a routerLink="/carrito" class="cart-btn">
+        Mi Carrito 🛒 
+        @if (totalCarrito() > 0) {
+          <span class="badge">{{ totalCarrito() }}</span>
+        }
+      </a>
+    }
     
     <div class="auth-section">
-      <span *ngIf="usuarioLogueado" class="user-badge">
-        👤 {{ usuarioLogueado.nombre }} ({{ usuarioLogueado.rol }})
-        <button (click)="logout()" class="btn-logout">Salir</button>
-      </span>
-      <div *ngIf="!usuarioLogueado" class="guest-actions">
-        <a routerLink="/login" class="btn-login-link">Iniciar Sesión</a>
-        <a routerLink="/registro" class="btn-register-link">Registrarse</a>
-      </div>
+      @if (estaLogueado()) {
+        <span class="user-badge">
+          👤 {{ usuarioLogueado()?.nombre }} ({{ usuarioLogueado()?.rol }})
+          <button (click)="logout()" class="btn-logout">Cerrar Sesión</button>
+        </span>
+      } @else {
+        <div class="guest-actions">
+          <a routerLink="/login" class="btn-login-link">Iniciar Sesión</a>
+          <a routerLink="/registro" class="btn-register-link">Registrarse</a>
+        </div>
+      }
     </div>
   </nav>
 </header>

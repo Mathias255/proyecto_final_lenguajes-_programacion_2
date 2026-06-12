@@ -1,9 +1,8 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../services/auth';
 import { CartService } from '../../services/cart';
-import { Usuario } from '../../models/interfaces';
 import { AnimeDirective } from '../../directives/anime.directive';
 
 @Component({
@@ -13,22 +12,22 @@ import { AnimeDirective } from '../../directives/anime.directive';
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.css']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent {
   private authService = inject(AuthService);
   private cartService = inject(CartService);
   private router = inject(Router);
 
-  usuarioLogueado: Usuario | null = null;
+  // Consumimos el signal directamente desde el servicio
+  usuarioLogueado = this.authService.currentUser;
+  
+  // Computamos estados para el HTML para mayor claridad
+  esAdmin = computed(() => this.authService.hasRole('ADMIN'));
+  estaLogueado = computed(() => this.authService.isLoggedIn());
+  
   totalCarrito = this.cartService.totalItems;
-
-  ngOnInit() {
-    this.authService.currentUser.subscribe(user => {
-      this.usuarioLogueado = user;
-    });
-  }
 
   logout() {
     this.authService.logout();
-    this.router.navigate(['/login']);
+    // La redirección ya ocurre dentro del logout() del servicio
   }
 }

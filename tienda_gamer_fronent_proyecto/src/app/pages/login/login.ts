@@ -30,39 +30,22 @@ export class LoginComponent {
     this.errorMessage = '';
     this.cargando = true;
 
-    this.usuarioService.login(this.credenciales).subscribe({
+    this.authService.login(this.credenciales.email, this.credenciales.password).subscribe({
       next: (respuesta: any) => {
-        console.log('RESPUESTA COMPLETA DEL BACKEND:', respuesta);
-        
-        // 🔥 ALERTA DE EMERGENCIA: Si el ID no aparece, mostramos la respuesta en un popup
-        if (!respuesta.id && !respuesta.userId && !respuesta.idUsuario) {
-          alert('DEBUG: El backend no envió un ID. Respuesta recibida: ' + JSON.stringify(respuesta));
-        }
-
-        const token = respuesta.token;
-
-        // Intentamos mapear el ID desde cualquier campo posible
-        const userId = respuesta.id || respuesta.userId || respuesta.idUsuario || respuesta.id_usuario;
-
-        // Construimos el objeto Usuario con los datos reales obtenidos del backend
-        const usuario: Usuario = {
-          id: userId,
-          nombre: respuesta.nombre,
-          email: respuesta.email,
-          rol: respuesta.rol
-        };
-
-        console.log('Login exitoso, usuario mapeado:', usuario);
-
-        // Guardamos el usuario y el token en AuthService / localStorage
-        this.authService.login(usuario, token);
+        console.log('Login exitoso:', respuesta);
         this.cargando = false;
-        this.router.navigate(['/catalogo']);
+        
+        // Redirección inteligente basada en rol
+        if (this.authService.hasRole('ADMIN')) {
+          this.router.navigate(['/admin/dashboard']);
+        } else {
+          this.router.navigate(['/catalogo']);
+        }
       },
       error: (err) => {
         this.cargando = false;
         // Mostramos el mensaje real del backend si está disponible
-        const mensajeBackend = err?.error?.message;
+        const mensajeBackend = err?.error?.message || err?.error?.error;
         this.errorMessage = mensajeBackend ?? 'Credenciales inválidas o error de servidor.';
         console.error('Error en login:', err);
       }
