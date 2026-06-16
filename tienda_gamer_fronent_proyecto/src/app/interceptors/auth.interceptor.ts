@@ -9,20 +9,13 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
   const router = inject(Router);
   const token = authService.getToken();
 
-  let authReq = req;
-  console.log(`INTERCEPTOR: ${req.method} a ${req.url}`);
-  
-  // Enviamos el token en TODAS las peticiones excepto login y registro
-  if (token && !req.url.includes('/login') && !req.url.includes('/usuarios')) {
-    console.log('INTERCEPTOR: Inyectando Token...');
-    authReq = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${token}`
-      }
-    });
-  } else {
-    console.log('INTERCEPTOR: No se inyectó token (Ruta pública)');
-  }
+  const isLogin = req.url.includes('/auth/login');
+  const isRegister = req.method === 'POST' && req.url.endsWith('/usuarios');
+  const isPublic = isLogin || isRegister;
+
+  const authReq = token && !isPublic
+    ? req.clone({ setHeaders: { Authorization: `Bearer ${token}` } })
+    : req;
 
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {

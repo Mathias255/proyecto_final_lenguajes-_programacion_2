@@ -1,6 +1,6 @@
 import { Component, OnInit, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { NavbarComponent } from '../../components/navbar/navbar';
 import { FooterComponent } from '../../components/footer/footer';
 import { ProductoFormComponent } from '../producto-form/producto-form';
@@ -26,6 +26,7 @@ export class CatalogoComponent implements OnInit {
   private authService = inject(AuthService);
   private cartService = inject(CartService);
   private notificationService = inject(NotificationService);
+  private route = inject(ActivatedRoute);
 
   productos: Producto[] = [];
   categorias: Categoria[] = [];
@@ -48,6 +49,8 @@ export class CatalogoComponent implements OnInit {
   ordenSeleccionado = 'default';
 
   ngOnInit() {
+    const catParam = this.route.snapshot.queryParamMap.get('categoria');
+    if (catParam) this.categoriaSeleccionadaId = Number(catParam);
     this.cargarCategorias();
     this.cargarProductos();
   }

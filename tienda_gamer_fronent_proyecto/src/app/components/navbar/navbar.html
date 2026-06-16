@@ -5,8 +5,11 @@
     <a routerLink="/catalogo" routerLinkActive="active">Ver Catálogo</a>
 
     @if (esAdmin()) {
-      <a routerLink="/admin/compras" routerLinkActive="active">Panel de Administración</a>
-      <a routerLink="/admin/auditoria" routerLinkActive="active">Ver Auditoría de Accesos</a>
+      <a routerLink="/admin/dashboard" routerLinkActive="active">Dashboard</a>
+      <a routerLink="/admin/compras" routerLinkActive="active">Compras</a>
+      <a routerLink="/admin/categorias" routerLinkActive="active">Categorías</a>
+      <a routerLink="/admin/clientes" routerLinkActive="active">Clientes</a>
+      <a routerLink="/admin/auditoria" routerLinkActive="active">Auditoría</a>
     }
 
     @if (!esAdmin()) {

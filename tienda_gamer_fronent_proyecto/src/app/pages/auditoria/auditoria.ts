@@ -4,6 +4,7 @@ import { NavbarComponent } from '../../components/navbar/navbar';
 import { FooterComponent } from '../../components/footer/footer';
 import { HttpClient } from '@angular/common/http';
 import { catchError, of } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 export interface AuditEntry {
   id: number;
@@ -110,7 +111,7 @@ export class AuditoriaComponent implements OnInit {
   cargarAuditoria() {
     // Asumimos que el backend tiene un endpoint de auditoría. 
     // Si no existe, al menos tenemos el componente listo para cuando se implemente.
-    this.http.get<AuditEntry[]>('http://localhost:8080/api/auditoria').pipe(
+    this.http.get<AuditEntry[]>(`${environment.apiUrl}/auditoria`).pipe(
       catchError(() => of([]))
     ).subscribe(data => this.entries.set(data));
   }

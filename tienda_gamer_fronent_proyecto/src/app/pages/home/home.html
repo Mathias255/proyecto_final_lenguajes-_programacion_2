@@ -1,84 +1,184 @@
 <app-navbar></app-navbar>
 
-<main>
-  <!-- Hero Section con Animación -->
+<main class="home-main">
+  <!-- Hero -->
   <section class="hero">
-    <div class="hero-overlay"></div>
+    <div class="hero-bg"></div>
+    <div class="hero-grid-overlay"></div>
+    <div class="hero-glow hero-glow--left"></div>
+    <div class="hero-glow hero-glow--right"></div>
+
     <div class="hero-content">
-      <div class="badge-new">NUEVA TEMPORADA 2026</div>
-      <h1>EL PODER DEL <span class="neon-text">HARDWARE</span> EN TUS MANOS</h1>
-      <p>Equípate con los mejores componentes de alto rendimiento y domina cada partida con tecnología de última generación.</p>
-      <div class="hero-btns">
-        <button routerLink="/catalogo" class="btn-hero">Explorar Tienda 🚀</button>
-        <button routerLink="/registro" class="btn-hero btn-hero-alt">Unirse a la Elite 🎮</button>
+      <div class="badge-new" [appAnime]="{ scale: [0.8, 1], opacity: [0, 1], delay: 100 }">
+        <span class="badge-dot"></span>
+        NUEVA TEMPORADA 2026
       </div>
+
+      <h1>
+        EL PODER DEL <span class="neon-text">HARDWARE</span><br>
+        EN TUS MANOS
+      </h1>
+
+      <p class="hero-subtitle">
+        Equípate con los mejores componentes de alto rendimiento y domina cada partida con tecnología de última generación.
+      </p>
+
+      <div class="hero-btns">
+        <a routerLink="/catalogo" class="btn-hero">
+          <i class="fas fa-store"></i> Explorar Tienda
+        </a>
+        @if (!usuarioLogueado()) {
+          <a routerLink="/registro" class="btn-hero btn-hero-alt">
+            <i class="fas fa-user-plus"></i> Unirse a la Elite
+          </a>
+        } @else if (!esAdmin()) {
+          <a routerLink="/carrito" class="btn-hero btn-hero-alt">
+            <i class="fas fa-shopping-cart"></i> Mi Carrito
+          </a>
+        }
+      </div>
+
+      <div class="hero-features">
+        <span><i class="fas fa-bolt"></i> Envío express</span>
+        <span><i class="fas fa-shield-alt"></i> Garantía oficial</span>
+        <span><i class="fas fa-headset"></i> Soporte 24/7</span>
+      </div>
+    </div>
+
+    <div class="scroll-hint">
+      <span>Scroll</span>
+      <div class="scroll-line"></div>
     </div>
   </section>
 
-  <!-- Stats Bar -->
+  <!-- Stats -->
   <section class="stats-bar">
     <div class="stat-item">
       <span class="stat-num">15K+</span>
       <span class="stat-label">Gamers Felices</span>
     </div>
+    <div class="stat-divider"></div>
     <div class="stat-item">
       <span class="stat-num">500+</span>
       <span class="stat-label">Productos Pro</span>
     </div>
+    <div class="stat-divider"></div>
     <div class="stat-item">
       <span class="stat-num">24h</span>
       <span class="stat-label">Envío Express</span>
     </div>
+    <div class="stat-divider"></div>
     <div class="stat-item">
       <span class="stat-num">2 Años</span>
       <span class="stat-label">Garantía Real</span>
     </div>
   </section>
 
-  <!-- Categorías Destacadas -->
+  <!-- Featured Products -->
+  @if (productosDestacados().length > 0) {
+    <section class="featured-products container">
+      <div class="section-header" [appAnime]="{ translateY: [20, 0], opacity: [0, 1] }">
+        <div class="section-tag">TOP PICKS</div>
+        <h2>PRODUCTOS <span class="primary-gradient-text">DESTACADOS</span></h2>
+        <p>Lo más potente de nuestra tienda, seleccionado para gamers exigentes.</p>
+      </div>
+
+      <div class="products-grid">
+        @for (prod of productosDestacados(); track prod.id) {
+          <a class="product-card" [routerLink]="['/producto', prod.id]"
+             [appAnime]="{ scale: [0.95, 1], opacity: [0, 1], duration: 500 }">
+            @if (prod.stock < 5) {
+              <span class="card-badge">Bajo Stock</span>
+            }
+            <div class="product-img">
+              <img [src]="prod.imagenUrl || 'https://via.placeholder.com/400x300?text=Hardware'"
+                   [alt]="prod.nombre" loading="lazy">
+              <div class="img-overlay">
+                <i class="fas fa-arrow-right"></i>
+              </div>
+            </div>
+            <div class="product-body">
+              <span class="product-cat">{{ prod.categoria?.nombre || 'General' }}</span>
+              <h3>{{ prod.nombre }}</h3>
+              <div class="product-footer">
+                <span class="product-price">${{ prod.precio }}</span>
+                @if (!esAdmin()) {
+                  <button class="btn-add-cart" (click)="agregarAlCarrito(prod, $event)" title="Añadir al carrito">
+                    <i class="fas fa-cart-plus"></i>
+                  </button>
+                }
+              </div>
+            </div>
+          </a>
+        }
+      </div>
+
+      <div class="section-cta">
+        <a routerLink="/catalogo" class="btn-outline">
+          Ver catálogo completo <i class="fas fa-arrow-right"></i>
+        </a>
+      </div>
+    </section>
+  }
+
+  <!-- Categories -->
   <section class="featured-categories container">
-    <div class="section-title">
-      <h2>EQUIPAMIENTO POR <span class="primary-gradient-text">CATEGORÍA</span></h2>
-      <p>Selecciona tu especialidad y encuentra el hardware perfecto.</p>
+    <div class="section-header" [appAnime]="{ translateY: [20, 0], opacity: [0, 1] }">
+      <div class="section-tag">CATEGORÍAS</div>
+      <h2>EQUIPAMIENTO POR <span class="primary-gradient-text">ESPECIALIDAD</span></h2>
+      <p>Selecciona tu categoría y encuentra el hardware perfecto para tu setup.</p>
     </div>
+
     <div class="cat-grid">
-      <div class="cat-card" routerLink="/catalogo">
-        <i class="fas fa-keyboard"></i>
-        <h3>Periféricos</h3>
-        <span>Ver 120+ productos</span>
-      </div>
-      <div class="cat-card" routerLink="/catalogo">
-        <i class="fas fa-desktop"></i>
-        <h3>Monitores</h3>
-        <span>Ver 45+ productos</span>
-      </div>
-      <div class="cat-card" routerLink="/catalogo">
-        <i class="fas fa-microchip"></i>
-        <h3>Componentes</h3>
-        <span>Ver 200+ productos</span>
-      </div>
-      <div class="cat-card" routerLink="/catalogo">
-        <i class="fas fa-headphones"></i>
-        <h3>Audio Pro</h3>
-        <span>Ver 80+ productos</span>
-      </div>
+      @for (cat of categorias(); track cat.id) {
+        <a class="cat-card" [routerLink]="['/catalogo']" [queryParams]="{ categoria: cat.id }"
+           [appAnime]="{ translateY: [20, 0], opacity: [0, 1], duration: 600 }">
+          <div class="cat-icon">
+            <i class="fas {{ getCategoryIcon(cat.nombre) }}"></i>
+          </div>
+          <h3>{{ cat.nombre }}</h3>
+          <p>{{ cat.descripcion || 'Explorar productos' }}</p>
+          <span class="cat-link">Explorar <i class="fas fa-chevron-right"></i></span>
+        </a>
+      } @empty {
+        @for (placeholder of [1, 2, 3, 4]; track placeholder) {
+          <a class="cat-card cat-card--placeholder" routerLink="/catalogo">
+            <div class="cat-icon"><i class="fas fa-gamepad"></i></div>
+            <h3>Catálogo</h3>
+            <p>Explora todo nuestro hardware</p>
+            <span class="cat-link">Ver todo <i class="fas fa-chevron-right"></i></span>
+          </a>
+        }
+      }
     </div>
   </section>
 
-  <!-- Beneficios Premium -->
+  <!-- Brands Marquee -->
+  <section class="brands-marquee">
+    <div class="marquee-track">
+      @for (marca of marcas; track marca) {
+        <span class="marquee-item">{{ marca }}</span>
+      }
+      @for (marca of marcas; track marca) {
+        <span class="marquee-item">{{ marca }}</span>
+      }
+    </div>
+  </section>
+
+  <!-- Benefits -->
   <section class="benefits">
     <div class="container benefit-grid">
-      <div class="benefit-item">
+      <div class="benefit-item" [appAnime]="{ translateX: [-20, 0], opacity: [0, 1] }">
         <div class="icon-box"><i class="fas fa-shipping-fast"></i></div>
         <h4>Despacho Ultra Veloz</h4>
         <p>Entregamos tu setup en tiempo récord directamente a tu puerta.</p>
       </div>
-      <div class="benefit-item">
+      <div class="benefit-item" [appAnime]="{ translateY: [20, 0], opacity: [0, 1], delay: 150 }">
         <div class="icon-box"><i class="fas fa-shield-alt"></i></div>
-        <h4>Garantía de Por Vida</h4>
-        <p>Todos nuestros componentes cuentan con respaldo técnico oficial.</p>
+        <h4>Garantía Oficial</h4>
+        <p>Todos nuestros componentes cuentan con respaldo técnico de fabricante.</p>
       </div>
-      <div class="benefit-item">
+      <div class="benefit-item" [appAnime]="{ translateX: [20, 0], opacity: [0, 1], delay: 300 }">
         <div class="icon-box"><i class="fas fa-headset"></i></div>
         <h4>Soporte Técnico 24/7</h4>
         <p>Nuestros expertos están listos para ayudarte con tu configuración.</p>
@@ -86,15 +186,29 @@
     </div>
   </section>
 
-  <!-- Call to Action Banner -->
+  <!-- CTA -->
   <section class="cta-banner container">
-    <div class="cta-card">
+    <div class="cta-card" [appAnime]="{ scale: [0.97, 1], opacity: [0, 1] }">
+      <div class="cta-glow"></div>
       <div class="cta-info">
-        <h3>¿LISTO PARA EL SIGUIENTE NIVEL?</h3>
-        <p>Regístrate hoy y obtén un 10% de descuento en tu primera compra de periféricos.</p>
-        <button routerLink="/registro" class="btn-hero">Empezar Ahora</button>
+        @if (!usuarioLogueado()) {
+          <div class="section-tag">OFERTA EXCLUSIVA</div>
+          <h3>¿LISTO PARA EL SIGUIENTE NIVEL?</h3>
+          <p>Regístrate hoy y obtén un 10% de descuento en tu primera compra de periféricos.</p>
+          <a routerLink="/registro" class="btn-hero btn-hero--sm">
+            <i class="fas fa-rocket"></i> Empezar Ahora
+          </a>
+        } @else {
+          <div class="section-tag">BIENVENIDO</div>
+          <h3>¡HOLA, {{ usuarioLogueado()?.nombre }}!</h3>
+          <p>Tu arsenal gamer te espera. Explora el catálogo y lleva tu experiencia al siguiente nivel.</p>
+          <a routerLink="/catalogo" class="btn-hero btn-hero--sm">
+            <i class="fas fa-store"></i> Ir al Catálogo
+          </a>
+        }
       </div>
-      <div class="cta-image">
+      <div class="cta-visual">
+        <div class="cta-ring"></div>
         <i class="fas fa-trophy trophy-icon"></i>
       </div>
     </div>

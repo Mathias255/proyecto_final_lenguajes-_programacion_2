@@ -16,18 +16,21 @@ export class RegistroComponent {
   private usuarioService = inject(UsuarioService);
   private router = inject(Router);
 
-  usuario: any = {
+  usuario = {
     nombre: '',
     apellido: '',
     email: '',
-    password: '',
-    rol: 'Cliente'
+    password: ''
   };
 
   errorMessage = '';
 
   onRegister() {
-    this.usuarioService.registrar(this.usuario).subscribe({
+    const payload: Partial<Usuario> = {
+      ...this.usuario,
+      rol: 'CLIENTE'
+    };
+    this.usuarioService.registrar(payload).subscribe({
       next: (res) => {
         alert('¡Usuario registrado con éxito! Ahora puedes iniciar sesión.');
         this.router.navigate(['/login']);

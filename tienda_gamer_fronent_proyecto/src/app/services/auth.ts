@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Usuario } from '../models/interfaces';
 import { Observable, tap } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 export interface LoginResponse {
   token: string;
@@ -19,7 +20,7 @@ export interface LoginResponse {
 export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
-  private apiUrl = 'http://localhost:8080/api/auth/login';
+  private apiUrl = `${environment.apiUrl}/auth/login`;
 
   // Usamos un Signal para manejar el estado reactivo del usuario (Angular 17+)
   private currentUserSignal = signal<Usuario | null>(this.getUsuarioDesdeStorage());

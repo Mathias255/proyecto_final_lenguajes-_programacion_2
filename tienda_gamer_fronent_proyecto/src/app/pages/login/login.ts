@@ -2,9 +2,7 @@ import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
-import { UsuarioService } from '../../services/usuario.service';
 import { AuthService } from '../../services/auth';
-import { Usuario } from '../../models/interfaces';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +12,6 @@ import { Usuario } from '../../models/interfaces';
   styleUrls: ['./login.css']
 })
 export class LoginComponent {
-  private usuarioService = inject(UsuarioService);
   private authService = inject(AuthService);
   private router = inject(Router);
 
