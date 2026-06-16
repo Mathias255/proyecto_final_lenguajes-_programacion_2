@@ -1,4 +1,4 @@
-import { Component, OnInit, inject, computed } from '@angular/core';
+import { Component, OnInit, inject, computed, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { NavbarComponent } from '../../components/navbar/navbar';
@@ -7,6 +7,7 @@ import { ProductoFormComponent } from '../producto-form/producto-form';
 import { CategoriaFormComponent } from '../../components/categoria-form/categoria-form';
 import { ProductoService } from '../../services/producto.service';
 import { CategoriaService } from '../../services/categoria.service';
+import { ResenaService } from '../../services/resena.service';
 import { AuthService } from '../../services/auth';
 import { CartService } from '../../services/cart';
 import { NotificationService } from '../../services/notification.service';
@@ -23,6 +24,7 @@ import { AnimeDirective } from '../../directives/anime.directive';
 export class CatalogoComponent implements OnInit {
   private productoService = inject(ProductoService);
   private categoriaService = inject(CategoriaService);
+  private resenaService = inject(ResenaService);
   private authService = inject(AuthService);
   private cartService = inject(CartService);
   private notificationService = inject(NotificationService);
@@ -31,6 +33,8 @@ export class CatalogoComponent implements OnInit {
   productos: Producto[] = [];
   categorias: Categoria[] = [];
   categoriaSeleccionadaId: number | null = null;
+
+  promediosMap = signal<Map<number, number>>(new Map());
   
   // Usamos signals/computed para reactividad
   usuarioLogueado = this.authService.currentUser;
@@ -60,13 +64,30 @@ export class CatalogoComponent implements OnInit {
   }
 
   cargarProductos() {
-    console.log('Cargando productos desde:', this.productoService.getProductos());
     this.productoService.getProductos().subscribe(prods => {
-      console.log('PRODUCTOS RECIBIDOS:', prods);
       this.productos = prods;
+      this.cargarPromedios(prods);
       this.aplicarFiltros();
-      console.log('PRODUCTOS FILTRADOS:', this.productosFiltrados);
     });
+  }
+
+  cargarPromedios(prods: Producto[]) {
+    prods.forEach(p => {
+      if (p.id) {
+        this.resenaService.getMediaCalificacion(p.id).subscribe(media => {
+          this.promediosMap.update((map: Map<number, number>) => {
+            const nuevoMap = new Map(map);
+            nuevoMap.set(p.id!, media);
+            return nuevoMap;
+          });
+        });
+      }
+    });
+  }
+
+  getPromedio(id: number | undefined): number {
+    if (!id) return 0;
+    return this.promediosMap().get(id) || 0;
   }
 
   seleccionarCategoria(id: number | null) {

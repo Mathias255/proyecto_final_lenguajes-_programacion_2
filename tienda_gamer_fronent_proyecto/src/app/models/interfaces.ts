@@ -4,6 +4,15 @@ export interface Categoria {
   descripcion?: string;
 }
 
+export interface Proveedor {
+  id?: number;
+  nombre: string;
+  contacto: string;
+  email: string;
+  telefono: string;
+  direccion: string;
+}
+
 export interface Producto {
   id?: number;
   nombre: string;
@@ -13,6 +22,18 @@ export interface Producto {
   imagenUrl: string;
   categoria?: Categoria;
   categoriaId?: number; // 🔥 Para compatibilidad con el backend
+  proveedor?: Proveedor;
+  proveedorId?: number;
+}
+
+export interface Resena {
+  id?: number;
+  productoId: number;
+  usuarioId: number;
+  nombreUsuario: string;
+  calificacion: number; // 1-5
+  comentario: string;
+  fechaResena: string;
 }
 
 export interface Usuario {
@@ -32,6 +53,15 @@ export interface DetalleCompra {
   precioUnitario: number;
 }
 
+export interface MetodoPago {
+  id?: number;
+  nombre: string;
+  descripcion: string;
+  tipo: 'TARJETA' | 'TRANSFERENCIA' | 'EFECTIVO' | 'BILLETERA_DIGITAL';
+  comisionPorcentaje: number;
+  activo: boolean;
+}
+
 export interface Compra {
   id?: number;
   usuario: Usuario;
@@ -39,4 +69,6 @@ export interface Compra {
   fecha?: string;
   total: number;
   detalles: DetalleCompra[];
+  metodoPago?: MetodoPago;
+  metodoPagoId?: number;
 }

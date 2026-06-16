@@ -9,16 +9,88 @@
       <span class="category-tag">{{ producto.categoria?.nombre }}</span>
       <h1>{{ producto.nombre }}</h1>
       <p class="description">{{ producto.descripcion }}</p>
+
+      <!-- Promedio de reseñas -->
+      <div class="rating-summary" *ngIf="resenas().length > 0">
+        <div class="stars-display">
+          <span *ngFor="let s of arregloEstrellas(5)"
+                class="star" [class.filled]="s <= promedio()">★</span>
+        </div>
+        <span class="rating-text">{{ promedio() }} / 5 — {{ resenas().length }} reseña{{ resenas().length !== 1 ? 's' : '' }}</span>
+      </div>
+      <div class="no-reviews" *ngIf="resenas().length === 0">
+        <span>Sin reseñas aún. ¡Sé el primero!</span>
+      </div>
       
       <div class="price-row">
         <span class="price">${{ producto.precio }}</span>
         <span class="stock" [class.low-stock]="producto.stock < 5">Stock disponible: {{ producto.stock }}</span>
       </div>
 
-      <button *ngIf="!esAdmin()" class="btn-buy" (click)="agregarAlCarrito()">Añadir al Carrito 🛒</button>
+      <!-- Info del proveedor (si existe) -->
+      <div class="proveedor-info" *ngIf="producto.proveedor">
+        <i class="fas fa-truck"></i>
+        <span>Proveedor: <strong>{{ producto.proveedor.nombre }}</strong> — {{ producto.proveedor.direccion }}</span>
+      </div>
+
+      <div class="actions-stack" *ngIf="!esAdmin()">
+        <button class="btn-buy" (click)="agregarAlCarrito()">Añadir al Carrito 🛒</button>
+        
+      </div>
+
       <button routerLink="/catalogo" class="btn-back">Volver al Catálogo</button>
     </div>
   </div>
+
+  <!-- Formulario de nueva reseña -->
+  <div class="resena-form-wrapper" *ngIf="mostrarFormResena">
+    <div class="resena-form">
+      <h3>✍️ Tu Reseña</h3>
+      <div class="star-selector">
+        <span *ngFor="let s of arregloEstrellas(5)"
+              class="star-select"
+              [class.filled]="s <= (estrellaHover || nuevaResena.calificacion)"
+              (mouseenter)="estrellaHover = s"
+              (mouseleave)="estrellaHover = 0"
+              (click)="setCalificacion(s)">★</span>
+        <span class="star-label">{{ nuevaResena.calificacion }} estrella{{ nuevaResena.calificacion !== 1 ? 's' : '' }}</span>
+      </div>
+      <textarea
+        [(ngModel)]="nuevaResena.comentario"
+        name="comentario"
+        placeholder="Escribe tu experiencia con este producto..."
+        rows="4"
+        class="resena-textarea">
+      </textarea>
+      <button class="btn-enviar-resena" (click)="enviarResena()">Publicar Reseña</button>
+    </div>
+  </div>
+
+  <!-- Listado de reseñas -->
+  <section class="resenas-section" *ngIf="resenas().length > 0">
+    <h2 class="resenas-title">Reseñas de clientes ({{ resenas().length }})</h2>
+    <div class="resenas-grid">
+      <div class="resena-card" *ngFor="let r of resenas()">
+        <div class="resena-header">
+          <div class="resena-autor">
+            <div class="avatar">{{ r.nombreUsuario.charAt(0).toUpperCase() }}</div>
+            <div>
+              <strong>{{ r.nombreUsuario }}</strong>
+              <small>{{ formatFecha(r.fechaResena) }}</small>
+            </div>
+          </div>
+          <div class="resena-stars">
+            <span *ngFor="let s of arregloEstrellas(5)"
+                  class="star" [class.filled]="s <= r.calificacion">★</span>
+          </div>
+        </div>
+        <p class="resena-comentario">{{ r.comentario }}</p>
+        <button *ngIf="esAdmin()" class="btn-del-resena" (click)="eliminarResena(r.id!)">
+          🗑️ Eliminar
+        </button>
+      </div>
+    </div>
+  </section>
 </div>
 
 <div class="loading" *ngIf="!producto">

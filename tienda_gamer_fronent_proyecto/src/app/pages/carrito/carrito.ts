@@ -1,36 +1,58 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Router } from '@angular/router';
 import { CartService } from '../../services/cart';
 import { AuthService } from '../../services/auth';
 import { CompraService } from '../../services/compra.service';
 import { UsuarioService } from '../../services/usuario.service';
+import { MetodoPagoService } from '../../services/metodo-pago.service';
 import { NotificationService } from '../../services/notification.service';
 import { NavbarComponent } from '../../components/navbar/navbar';
 import { FooterComponent } from '../../components/footer/footer';
-import { Compra, DetalleCompra, Usuario } from '../../models/interfaces';
+import { Compra, DetalleCompra, Usuario, MetodoPago } from '../../models/interfaces';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-carrito',
   standalone: true,
-  imports: [CommonModule, RouterModule, NavbarComponent, FooterComponent],
+  imports: [CommonModule, RouterModule, NavbarComponent, FooterComponent, FormsModule],
   templateUrl: './carrito.html',
   styleUrls: ['./carrito.css']
 })
-export class CarritoComponent {
+export class CarritoComponent implements OnInit {
   private cartService = inject(CartService);
   private authService = inject(AuthService);
   private compraService = inject(CompraService);
   private usuarioService = inject(UsuarioService);
+  private metodoPagoService = inject(MetodoPagoService);
   private notificationService = inject(NotificationService);
   private router = inject(Router);
 
   items = this.cartService.items;
   total = this.cartService.totalPrecio;
 
-  // ... (otros métodos iguales)
+  metodosPago = signal<MetodoPago[]>([]);
+  metodoPagoIdSeleccionado: number | null = null;
+
+  ngOnInit() {
+    this.cargarMetodosPago();
+  }
+
+  cargarMetodosPago() {
+    this.metodoPagoService.getMetodosPagoActivos().subscribe(data => {
+      this.metodosPago.set(data);
+      if (data.length > 0) {
+        this.metodoPagoIdSeleccionado = data[0].id ?? null;
+      }
+    });
+  }
 
   finalizarCompra() {
+    if (!this.metodoPagoIdSeleccionado) {
+      this.notificationService.show('Por favor, selecciona un método de pago.', 'warning');
+      return;
+    }
+
     let usuario = this.authService.currentUserValue;
     if (!usuario) {
       this.notificationService.show('Debes iniciar sesión para realizar la compra.', 'warning');
@@ -77,6 +99,7 @@ export class CarritoComponent {
       usuario: { id: usuario.id },
       usuarioId: usuario.id,
       total: this.total(),
+      metodoPagoId: this.metodoPagoIdSeleccionado,
       detalles: detalles.map(d => ({
         producto: { id: d.productoId },
         productoId: d.productoId,

@@ -72,6 +72,9 @@
             <div class="card-body">
               <div class="card-info">
                 <span class="category-name">{{ prod.categoria?.nombre || 'General' }}</span>
+                <div class="rating-badge" *ngIf="getPromedio(prod.id) > 0">
+                   <i class="fas fa-star"></i> {{ getPromedio(prod.id) }}
+                </div>
                 <h4 class="prod-title">{{ prod.nombre }}</h4>
                 <p class="prod-desc">{{ prod.descripcion }}</p>
               </div>

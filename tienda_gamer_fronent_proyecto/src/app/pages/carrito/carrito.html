@@ -30,6 +30,19 @@
         <span>Subtotal:</span>
         <span>${{ total() }}</span>
       </div>
+      
+      <div class="payment-method-section">
+        <label>Método de Pago</label>
+        <select [(ngModel)]="metodoPagoIdSeleccionado" class="payment-select">
+          <option *ngFor="let m of metodosPago()" [value]="m.id">
+            {{ m.nombre }} ({{ m.comisionPorcentaje }}% com.)
+          </option>
+        </select>
+        <p class="payment-desc" *ngIf="metodoPagoIdSeleccionado">
+          {{ metodosPago().find(m => m.id == metodoPagoIdSeleccionado)?.descripcion }}
+        </p>
+      </div>
+
       <div class="summary-row">
         <span>Envío:</span>
         <span class="free">GRATIS</span>

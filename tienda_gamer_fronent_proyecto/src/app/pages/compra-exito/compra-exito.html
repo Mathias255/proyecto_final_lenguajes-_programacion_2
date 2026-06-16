@@ -41,7 +41,7 @@
         </div>
         <div class="billing-card">
           <label><i class="fas fa-credit-card"></i> Pago</label>
-          <p>Pasarela Digital Segura</p>
+          <p>{{ c.metodoPago?.nombre || 'Pasarela Digital Segura' }}</p>
           <p>ID Transacción: TXN-{{c.id}}992</p>
         </div>
       </div>

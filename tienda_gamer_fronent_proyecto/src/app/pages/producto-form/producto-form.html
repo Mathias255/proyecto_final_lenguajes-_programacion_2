@@ -24,11 +24,19 @@
         </div>
       </div>
 
-      <div class="group">
-        <label>Categoría</label>
-        <select [(ngModel)]="categoriaIdSeleccionada" name="categoria">
-          <option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nombre }}</option>
-        </select>
+      <div class="row">
+        <div class="group flex">
+          <label>Categoría</label>
+          <select [(ngModel)]="categoriaIdSeleccionada" name="categoria">
+            <option *ngFor="let cat of categorias" [value]="cat.id">{{ cat.nombre }}</option>
+          </select>
+        </div>
+        <div class="group flex">
+          <label>Proveedor</label>
+          <select [(ngModel)]="proveedorIdSeleccionado" name="proveedor">
+            <option *ngFor="let prov of proveedores" [value]="prov.id">{{ prov.nombre }}</option>
+          </select>
+        </div>
       </div>
 
       <div class="group">

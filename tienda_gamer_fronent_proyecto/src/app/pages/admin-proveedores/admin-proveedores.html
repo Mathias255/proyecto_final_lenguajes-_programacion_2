@@ -1,0 +1,57 @@
+<app-navbar></app-navbar>
+
+<div class="admin-container">
+  <header class="page-header" [appAnime]="{ translateY: [-20, 0], opacity: [0, 1] }">
+    <h1>🏢 Gestión de Proveedores</h1>
+    <p>Administra los proveedores de tus productos y componentes.</p>
+    <button class="btn-primary mt-4" (click)="abrirModalCrear()">+ Nuevo Proveedor</button>
+  </header>
+
+  <div class="main-layout">
+    <div class="search-bar" [appAnime]="{ scale: [0.95, 1], opacity: [0, 1], delay: 100 }">
+      <input type="text" [(ngModel)]="busqueda" placeholder="Buscar proveedor por nombre, dirección o contacto...">
+    </div>
+
+    <main class="table-card" [appAnime]="{ scale: [0.95, 1], opacity: [0, 1], delay: 200 }">
+      <table class="gamer-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>Contacto</th>
+            <th>Email</th>
+            <th>Dirección</th>
+            <th>Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let p of proveedoresFiltrados">
+            <td>#{{ p.id }}</td>
+            <td><strong>{{ p.nombre }}</strong></td>
+            <td>{{ p.contacto }}<br><small>{{ p.telefono }}</small></td>
+            <td>{{ p.email }}</td>
+            <td>{{ p.direccion }}</td>
+            <td>
+              <div class="action-btns">
+                <button class="btn-edit" (click)="abrirModalEditar(p)">✏️</button>
+                <button class="btn-delete" (click)="eliminar(p.id)">🗑️</button>
+              </div>
+            </td>
+          </tr>
+          <tr *ngIf="proveedoresFiltrados.length === 0">
+            <td colspan="6" class="no-data">No hay proveedores registrados o no coinciden con la búsqueda.</td>
+          </tr>
+        </tbody>
+      </table>
+    </main>
+  </div>
+</div>
+
+<!-- Modal -->
+<app-proveedor-form 
+  *ngIf="mostrarModal" 
+  [proveedor]="proveedorEditar" 
+  (alCerrar)="cerrarModal($event)">
+</app-proveedor-form>
+
+<app-footer></app-footer>

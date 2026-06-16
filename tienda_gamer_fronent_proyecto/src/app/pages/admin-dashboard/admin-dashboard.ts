@@ -33,6 +33,20 @@ import { AnimeDirective } from '../../directives/anime.directive';
           <button routerLink="/catalogo" class="btn-dash">Ir al Inventario</button>
         </div>
 
+        <div class="stat-card" [appAnime]="{ scale: [0.9, 1], opacity: [0, 1], delay: 450 }">
+          <i class="fas fa-truck"></i>
+          <h3>Proveedores</h3>
+          <p class="value">Gestión de Logística</p>
+          <button routerLink="/admin/proveedores" class="btn-dash">Gestionar Proveedores</button>
+        </div>
+
+        <div class="stat-card" [appAnime]="{ scale: [0.9, 1], opacity: [0, 1], delay: 475 }">
+          <i class="fas fa-credit-card"></i>
+          <h3>Métodos de Pago</h3>
+          <p class="value">Configuración Pasarela</p>
+          <button routerLink="/admin/metodos-pago" class="btn-dash">Configurar Pagos</button>
+        </div>
+
         <div class="stat-card" [appAnime]="{ scale: [0.9, 1], opacity: [0, 1], delay: 500 }">
           <i class="fas fa-users"></i>
           <h3>Clientes</h3>
